@@ -1,0 +1,4272 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Spring MVC</title>
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+			<!--link rel="stylesheet" href="css/theme/beige.css" id="theme">
+		<link rel="stylesheet" href="css/theme/print.css" id="theme"-->
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+	<style type="text/css">
+            #header-left {
+                position: absolute;
+                top: 0%;
+                left: 0%;
+            }
+            #header-right {
+                position: absolute;
+                top: 0%;
+                right: 0%;
+            }
+            #footer-left {
+                position: absolute;
+                bottom: 0%;
+                left: 0%;
+            }
+			 #footer-right {
+                position: absolute;
+                bottom: 0%;
+                 right: 0%;
+            }
+			
+			 #footer-center {
+               position: absolute;
+			  margin: auto;
+			  right: 0;
+			  bottom: 0;
+			  left: 0;
+			  height: 0px;
+			  background-color: #f3f2ef;
+			  border-radius: 3px;
+            }
+        </style>
+
+        <div id="hidden" style="display:none;">
+            <div id="header">
+                <div id="header-left"></div>
+                <div id="header-right"></div>
+				<div id="footer-left"><p  style="font-size:12px"></p></div>
+                <div id="footer-center"><p  style="font-size:12px; color:gray;">Spring MVC by Ekkachai Kaewprasert</p></div>
+            </div>
+        </div>
+		<div class="reveal">
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Spring MVC</h1>
+				</section>
+				<!--section>
+				<h2>Agenda</h2>
+			</section-->
+			
+				<section>
+				<h2>Spring Projects</h2>
+				<img  style="border:0;background:none;box-shadow:none" width="360" height="360" src="img/spring/springproject.png">	
+			</section>
+
+			<section>
+				<h2>What is spring mvc?</h2>
+				<p>Spring MVC is the web component of Spring's framework</p>
+				<ul>
+					<li>Model - Encapsulates the application data and in general they will consist of POJO</li>
+					<li>View - responsible for rendering the model data and generates output in HTML</li>
+					<li>Controller - Processing user requests and building appropriate model and passes it to the view for rendering</li>
+				</ul>
+			</section>
+			
+			<section>
+				<h2>Spring MVC Components</h2>
+				<!--ul>
+					<li>DispatcherServlet - responsible for intercepting the request and dispatching for specific urls</li>
+					<li>Controller - responsible for processing user requests and building appropriate model and passes it to theview for rendering</li>
+					<li>View - interface represents presentation logic and isresponsible for rendering content</li>
+					<li>ModelAndView - class objects encapsulates view and model linking</li>
+					<li>Model - encapsulates the application data, will consist of POJO</li>
+				</ul-->
+			</section>
+			<section>
+				<h2>DispatcherServlet</h2>
+				<p>Handles all the HTTP requests and responses</p>
+				<img  style="border:0;" width="720" height="461" src="img/spring/dispatcher.jpg">	
+			</section>
+
+			<section>
+				<h2>DispatcherServlet Workflow Details</h2>
+					<ul>
+						<li>After receiving an HTTP request, DispatcherServlet consults the HandlerMapping to call the appropriate Controller</li>
+						<li>The Controller takes the request and calls the appropriate service methods based on used GET or POST method. The service method will set model data based on defined business logic and returns view name to the DispatcherServlet</li>
+						<li>The DispatcherServlet will take help from ViewResolver to pickup the defined view for the request</li>
+						<li>Once view is finalized, The DispatcherServlet passes the model data to the view which is finally rendered on the browser</li>
+					</ul>
+			</section>
+
+				<section>
+				<h2>Spring Configuration</h2>
+			</section>
+
+
+			<section>
+				<h2>DispatcherServlet Configuration</h2>
+				<p>Using a URL mapping in the web.xml file</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<web-app>
+      <servlet>
+        <servlet-name>example</servlet-name>
+            <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+            <load-on-startup>1</load-on-startup>
+      </servlet>
+      <servlet-mapping>
+            <servlet-name>example</servlet-name>
+            <url-pattern>/example/*</url-pattern>
+      </servlet-mapping>
+</web-app>
+				</code></pre>
+					<p>Spring MVC looks for a file named <a>[servlet-name]-servlet.xml</a> in the <a>WEB-INF</a> directory</p>
+			</section>
+
+			<section>
+				<h2>Use another name</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/root-context.xml</param-value>
+</context-param>
+<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+		         <param-name>contextConfigLocation</param-name>
+		         <param-value></param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+</servlet>
+<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>/*</url-pattern>
+</servlet-mapping>
+			</code></pre>
+			<p style="font-size: 22px;">***Spring used default configuration  in &lt;servlet-name&gt;-servlet.xml if has same config in any file.</p>
+	</section>
+			<section>
+				<h2>Spring Configuration</h2>
+				<p>For the previous example we would need to create a file in /WEB-INF named <a>example-servlet.xml</a></p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;beans&gt;
+   &lt;mvc:annotation-driven/&gt;
+   &lt;context:component-scan base-package="th.co.augmentis" /&gt;
+   &lt;bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"&gt;
+      &lt;property name="prefix" value="/WEB-INF/jsp/" /&gt;
+      &lt;property name="suffix" value=".jsp" /&gt;
+   &lt;/bean&gt;
+&lt;/beans&gt;
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>Spring Configuration(cont.)</h2>
+					<ul>
+						<li>&lt;mvc:annotation-driven/&gt; tells Spring to support annotations like @Controller, @RequestMapping and others</li>
+						<li>&lt;context:component-scan/&gt; use to activate Spring MVC annotation scanning annotations like @Controller and @RequestMapping etc.</li>
+						<li>InternalResourceViewResolver looks for JSPs that match a given view name in the director /WEB-INF/jsp</li>					
+					</ul>
+			</section>
+
+			<section>
+				<h2>Spring MVC Resource</h2>
+				<p>Used to configuataion static resources</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+
+	&lt;mvc:resources mapping="/resources/**" location="/" /&gt;
+     
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>Spring Property</h2>
+				<p>Used for externalizing properties from the Spring bean</p>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        &lt;property name="location" value="classpath:/jdbc.properties"/&gt;
+</bean>
+     				</code></pre>
+				<p>jdbc.properties</p>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+jdbc.mysql.driverClassName= com.mysql.jdbc.Driver
+jdbc.mysql.dialect=org.hibernate.dialect.MySQLDialect
+jdbc.mysql.databaseurl=jdbc:mysql://localhost:3306/hellospring
+jdbc.mysql.username=root
+jdbc.mysql.password=root
+
+     
+				</code></pre>
+			</section>
+
+	<section>
+				<h2>Spring DataSource</h2>
+				<p>Configuring the plain old JDBC DriverManager via bean properties</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        &lt;property name="driverClassName" value="${jdbc.mysql.driverClassName}"/&gt;
+        &lt;property name="url" value="${jdbc.mysql.databaseurl}"/&gt;
+        &lt;property name="username" value="${jdbc.mysql.username}"/&gt;
+        &lt;property name="password" value="${jdbc.mysql.password}"/&gt;
+</bean>
+				</code></pre>
+			</section>
+				<section>
+				<h2>SessionFactory</h2>
+				<p>Create sessions to interact with the database</p>
+
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<bean id="sessionFactory"  class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        &lt;property name="packagesToScan" value="th.co.augmentis.entity"/&gt; 
+        &lt;property name="dataSource" ref="dataSource"/&gt;
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${jdbc.mysql.dialect}</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.cache.use_second_level_cache">false</prop>
+                <prop key="hibernate.cache.use_query_cache">false</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+</bean>
+				</code></pre>
+			</section>
+
+				<section>
+				<h2>Transaction Manager</h2>
+				<p>Manage all the transactional </p>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;tx:annotation-driven /&gt;
+&lt;bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"&gt;
+        &lt;property name="sessionFactory" ref="sessionFactory" /&gt;
+&lt;/bean&gt;
+				</code></pre>
+				<p>&lt;tx:annotation-driven/&gt; element defines that we are declaring transactions using annotations</p>
+			</section>
+
+		<section>
+				<h2>Spring MVC Annotations</h2>
+			</section>
+			<section>
+				<!--h2>Defining a controller with</h2-->				
+				<h2>@Controller</h2>
+				<p>Defines the class as a Spring MVC controller</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+public class HelloWorldController {
+
+    public String helloWorld(Model model) {
+        model.addAttribute("message", "Hello World!");
+        return "helloWorld";
+    }
+}
+				</code></pre>
+			</section>
+
+			<section>
+				<!--h2>Mapping Requests With</h2-->
+				<h2>@RequestMapping</h2>
+				<p>Define URL mapping for a class and/or method</p>
+				
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+public class HelloWorldController {
+
+    @RequestMapping(value = "/helloWorld", method = {RequestMethod.POST})
+    public String helloWorld(Model model) {
+        model.addAttribute("message", "Hello World!");
+        return "helloWorld";
+    }
+}
+				</code></pre>
+					<ul>
+						<li>value - indicates the URL to which the handler method</li>
+						<li>mothod - list of supported HTTP method (GET, POST)</li>
+						
+					</ul>
+			</section>
+
+			<section>
+				<h2>@RequestMapping(cont.)</h2>
+				<p>The request <a>Content-Type</a> will be matched only  the specified media type</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+@RequestMapping(value = "/pets", method = RequestMethod.POST, consumes="application/json")
+public void addPet(@RequestBody Pet pet, Model model) {
+    // implementation omitted
+}
+				</code></pre>
+			</section>
+			<section>
+				<h2>@RequestMapping(cont.)</h2>
+				<p>The request will be matched only if the <a>Accept</a> request header matches one of these values</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+@RequestMapping(value = "/pets/{petId}", method = RequestMethod.GET, produces="application/json")
+@ResponseBody
+public Pet getPet(@PathVariable String petId, Model model) {
+    // implementation omitted
+}
+				</code></pre>
+			</section>
+			<section>
+				<h2>@RequestMapping(cont.)</h2>
+				<p>Request Parameters  Values - required parameters</p>
+					<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+@RequestMapping("/owners/{ownerId}")
+public class RelativePathUriTemplateController {
+    @RequestMapping(value = "/pets/{petId}", method = RequestMethod.GET, params="myParam=myValue")
+    public void findPet(@PathVariable String ownerId, @PathVariable String petId, Model model) {
+        // implementation omitted
+    }
+}
+				</code></pre>
+			
+			</section>
+			<section>
+				<h2>@RequestMapping(cont.)</h2>
+				<p>Request Header Values - required headers</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+@RequestMapping("/owners/{ownerId}")
+public class RelativePathUriTemplateController {
+    @RequestMapping(value = "/pets", method = RequestMethod.GET, headers="myHeader=myValue")
+    public void findPet(@PathVariable String ownerId, @PathVariable String petId, Model model) {
+        // implementation omitted
+    }
+}
+				</code></pre>
+			</section>
+			<section>
+				<h2>@RequestMapping(cont.)</h2>
+				<p>Arguments and return types </p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+public class SomeController {
+
+    @RequestMapping
+    public String someMethod(Model model) {
+       // implementation omitted
+        return "returnValue"
+    }
+}
+
+				</code></pre>
+				<ul>
+				<li>String - Return value</li>
+				<li>someMethod - Arguments</li>
+				</ul>
+			</section>
+			<!--section>
+				<h2>URI Template Patterns</h2>
+					<p>URI templates used for access to parts of a URL in a <a>@RequestMapping</a> method.</p>
+					<li>For example</li>
+				  <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+http://www.example.com/users/{userName}
+				</code></pre>
+				<li>Assigning the value fred to the variable </li>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+http://www.example.com/users/fred
+				</code></pre>
+			</section-->
+			<section>
+			<h2>Allowed arguments</h2>
+			<ul>
+				<li>HttpServletRequest, HttpServletResponse, HttpSession </li>
+				<li>WebRequest, NativeWebRequest </li>
+				<li>java.util.Locale</li>
+				<li>java.io.InputStream, java.io.Reader</li>
+				<li>java.io.OutputStream, java.io.Writer </li>
+				<li>java.security.Principle</li>
+				<li>HttpEntity</li>
+				<li>java.util.Map, Model, ModelMap</li>
+				<li>Errors, BindingResult </li>
+				<li>etc. </li>
+			</ul>
+			</section>
+
+				<section>
+			<h2>Allowed return types</h2>
+			<ul>
+				<li>ModelAndView, Model, java.util.Map, View</li>
+				<li>String</li>
+				<ul><li>Represents a view name, if not specified otherwise.</li></ul>
+				<li>void</li>
+				<li>HttpEntity, ResponseEntity</li>
+				<li>etc. </li>
+			</ul>
+			</section>
+
+			<section>
+				<h2>@PathVarible</h2>
+				<p>In Spring MVC use the <a>@PathVariable</a> annotation on a method argument to bind it to the value of a URI template variable</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@RequestMapping(value="/owners/{ownerId}", method=RequestMethod.GET)
+public String findOwner(@PathVariable String ownerId, Model model) {
+    // implementation omitted
+}
+				</code></pre>
+				<p>or</p>
+									<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@RequestMapping(value="/owners/{ownerId}", method=RequestMethod.GET)
+public String findOwner(@PathVariable("ownerId") String theOwner, Model model) {
+    // implementation omitted
+}
+				</code></pre>
+			</section>
+				<section>
+				<h2>@PathVarible(cont)</h2>
+				<p><p>A method can have any number of <a>@PathVariable</a> annotations</p></p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@RequestMapping(value="/owners/{ownerId}/pets/{petId}", method=RequestMethod.GET)
+public String findPet(@PathVariable String ownerId, @PathVariable String petId, Model model) {
+    // implementation omitted
+}
+				</code></pre>
+				<p>eg.</p>
+									<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+http://www.example.com/owners/42/pets/21
+				</code></pre>
+			</section>
+
+			
+			<section>
+				<h2>@RequestParam</h2>
+				<p>Use the <a>@RequestParam</a> annotation to bind request parameters to a method parameter in controller</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+@RequestMapping("/pets")
+@SessionAttributes("pet")
+public class EditPetForm {
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String setupForm(@RequestParam("petId") int petId, ModelMap model) {
+        Pet pet = this.clinic.loadPet(petId);
+        model.addAttribute("pet", pet);
+        return "petForm";
+    }
+}
+				</code></pre>
+				<p style="font-size: 22px;">***Parameters using this annotation are required by default</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+				e.g., @RequestParam(value="id", required=false)
+				</code></pre>
+			</section>
+		
+			<section>
+				<h2>@RequestBody</h2>
+					<p>Indicates that a method parameter should be bound to the value of the HTTP request body</p>
+<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@RequestMapping(value = "/something", method = RequestMethod.PUT)
+public void handle(@RequestBody String body, Writer writer) throws IOException {
+    writer.write(body);
+}
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>@ResponceBody</h2>
+				<p>Indicates that the return type should be written straight to the HTTP response body </p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@RequestMapping(value = "/something", method = RequestMethod.PUT)
+@ResponseBody
+public String helloWorld() {
+    return "Hello World";
+}
+				</code></pre>
+			</section>
+				<section>
+					<h2>Questions?</h2>
+				</section>
+<section>
+				<h2>JSTL & JSP EL</h2>
+			</section>
+			<section>
+				<h2>JSP Standard Tag Library(JSTL)</h2>
+					<p>A collection of useful JSP tags</p>
+					<ul>
+						<li><a>Core Tags</a> -  most frequently used JSTL tags</li>
+						<li><a>Formatting tags</a> - format and display text, the date, the time, and numbers </li>
+						<li><a>SQL tags</a> -  interacting with relational databases (RDBMSs) </li>
+						<li><a>XML tags</a> - custom tags for interacting with XML data</li>
+						<li><a>JSTL Functions</a> - standard functions, most of which are common string manipulation functions</li>
+					</ul>
+			</section>
+
+			<section>
+				<h2>How to use JSTL</h2>
+					<p>Download from link <a>http://tomcat.apache.org/taglibs/standard/</a></p>
+					<p>Copy the JAR files in the distribution's 'lib' directory to your application's webapps\ROOT\WEB-INF\lib directory.</p>
+					<p>or Add Maven Dependency</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<dependency>
+          <groupId>javax.servlet</groupId>
+          <artifactId>jstl</artifactId>
+          <version>1.2</version>
+</dependency>
+				</code></pre>
+
+			</section>
+			<section>
+				<h2>Using JSTL tags from a JSP</h2>
+				
+				<p>Core Tags Library</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+				</code></pre>
+				<p>XML tags Library</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml" %>
+				</code></pre>
+				<p>Formatting tags Library </p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+				</code></pre>
+				<p>SQL tags Library</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+				</code></pre>
+					<p>JSTL Functions Library</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>JSP Expression Language (EL)</h2>
+					<p>Expression Language makes it possible to easily access application data stored in JavaBeans components</p>
+					<ul>
+						<li>Allows you to create expressions both arithmetic and logical</li>
+						<li>Can use integers, floating numbers, strings, boolean values, and null.</li>
+					</ul>
+			</section>
+
+			<section>
+				<h2>JSP Expression Language (cont.)</h2>
+				<ul style="width:100%;">
+						<p>Accessing bean using simple syntax</p>
+					<ul>
+						<li><a>${name}</a> for a simple variable </li>
+						<li><a>${name.foo.bar}</a> for a nested property</li>
+					</ul>
+						<p>Kinds of expressions</p>
+					<ul>
+						<li>Arithmetic</li>
+					</ul>
+					 <pre style="width:100%;"><code contenteditable style="margin-top: 20px; width">&lt;jsp:setProperty name="box" value=“${2*box.width+2*box.height}"/&gt;
+                    </code></pre>
+					<ul>
+						<li>Logical</li>
+					</ul>
+					 <pre style="width:100%;"><code contenteditable style="margin-top: 20px; width">&lt;c:if test="${bean1.a &lt; 3}" &gt; ... &lt;/c:if&gt;
+                    </code></pre>
+				</ul>
+			</section>
+			<section>
+				<h2>Operators in EL</h2>
+					<table>
+						<thead>
+							<tr>
+								<th>Operator</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+							<tr>
+								<td>.</td>
+								<td>Access a bean property or Map entry</td>
+							<tr>
+							<tr>
+								<td>[]</td>
+								<td>Access an array or List element</td>
+							<tr>
+							<tr>
+								<td>( )	</td>
+								<td>Group a subexpression to change the evaluation order</td>
+							<tr>
+							<tr>
+								<td>+</td>
+								<td>Addition</td>
+							<tr>
+							<tr>
+								<td>-</td>
+								<td>Subtraction or negation of a value</td>
+							<tr>
+							<tr>
+								<td>*</td>
+								<td>Multiplication</td>
+							<tr>
+							<tr>
+								<td>/ or div</td>
+								<td>Division</td>
+							<tr>
+							<tr>
+								<td>% or mod</td>
+								<td>Modulo (remainder)</td>
+							<tr>
+						</tbody>
+					</table>
+			</section>
+			<section>
+				<h2>Operators in EL(cont.)</h2>
+					<table style="width:100%;">
+						<thead>
+							<tr>
+								<th>Operator</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>== or eq	</td>
+								<td>Test for equality</td>
+							<tr>
+							<tr>
+								<td>!= or ne</td>
+								<td>Test for inequality</td>
+							<tr>
+							<tr>
+								<td>&lt; or lt</td>
+								<td>Test for less than</td>
+							<tr>
+							<tr>
+								<td>&gt; or gt</td>
+								<td>Test for greater than</td>
+							<tr>
+							<tr>
+								<td>&lt;= or le</td>
+								<td>Test for less than or equal</td>
+							<tr>
+							<tr>
+								<td>&gt;= or ge	</td>
+								<td>Test for greater than or equal</td>
+							<tr>
+							<tr>
+								<td>&& or and</td>
+								<td>Test for logical AND</td>
+							<tr>
+							<tr>
+								<td>|| or or</td>
+								<td>Test for logical OR</td>
+							<tr>
+							<tr>
+								<td>! or not</td>
+								<td>Unary Boolean complement</td>
+							<tr>
+							<tr>
+								<td>empty</td>
+								<td>Test for empty variable values</td>
+							<tr>
+						</tbody>
+					</table>
+			</section>
+			<section>
+				<h2>Functions in JSP EL</h2>
+				<p>JSP EL allows you to use functions in expressions as well.These <a>functions must be defined in custom tag libraries.</a></p>
+				<p>A function usage has the following syntax:</p>
+				<pre style="width:90%;"><code contenteditable style="margin-top: 20px; width">
+${ns:func(param1, param2, ...)}
+
+ns is the namespace of the function, func is the name of the function, param1 is the first parameter value
+                    </code></pre>
+					<p>eg.</p>
+					<pre style="width:90%;"><code contenteditable style="margin-top: 20px; width">
+${fn:length("Get my length")}
+                    </code></pre>
+					
+			</section>
+			<section>
+				<h2>Implicit Objects</h2>
+				<p>Implicit Objects are the <a>Java objects that the Container makes available to used directly without being explicitly declared</a>.</p>
+				<p>JSP Implicit Objects are also called pre-defined variables</p>
+			</section>
+
+				<section>
+				<h2>Implicit Objects</h2>
+				<p>The JSP expression language supports the following implicit objects</p>
+					<table style="width:100%;">
+						<thead>
+							<tr>
+								<th>Implicit object</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>pageScope</td>
+								<td>Scoped variables from page scope</td>
+							<tr>
+							<tr>
+								<td>requestScope</td>
+								<td>Scoped variables from request scope</td>
+							<tr>
+							<tr>
+								<td>sessionScope</td>
+								<td>Scoped variables from session scope</td>
+							<tr>
+							<tr>
+								<td>applicationScope</td>
+								<td>Scoped variables from application scope</td>
+							<tr>
+							<tr>
+								<td>param</td>
+								<td>Request parameters as strings</td>
+							<tr>
+							<tr>
+								<td>paramValues</td>
+								<td>Request parameters as collections of strings</td>
+							<tr>
+							
+						</tbody>
+					</table>
+			</section>
+
+			<section>
+				<h2>Implicit Objects(cont.)</h2>
+					<table style="width:100%;">
+						<thead>
+							<tr>
+								<th>Implicit object</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>					
+						<tr>
+								<td>header</td>
+								<td>HTTP request headers as strings</td>
+							<tr>
+							<tr>
+								<td>headerValues</td>
+								<td>HTTP request headers as collections of strings</td>
+							<tr>
+							
+							<tr>
+								<td>initParam</td>
+								<td>Context-initialization parameters</td>
+							<tr>
+							<tr>
+								<td>cookie</td>
+								<td>Cookie values</td>
+							<tr>
+							<tr>
+								<td>pageContext</td>
+								<td>The JSP PageContext object for the current page</td>
+							<tr>
+						</tbody>
+					</table>
+			</section>
+			<section>
+				<h2>Scope in JSP</h2>
+				<p><img  width="638" height="517"  border=0 style ="background-color :#fff" src="img/scope.jpg"></p>
+			</section>
+			<section>
+				<h2>Scope in JSP(cont.)</h2>
+				<table style="width:100%;">
+				<thead>
+							<tr>
+								<th>Scope</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>					
+						<tr>
+								<td>Page Scope</td>
+								<td>If a bean is declared with Page scope, It cannot be referenced by any other JSP or servlet, even if a forward or include is used.</td>
+							<tr>
+						<tr>
+								<td>Request Scope</td>
+								<td>If a bean is declared with Request scope, The reference remains alive in any other servlet or JSP that is called by jsp:include and jsp:forward.</td>
+							<tr>
+						</tbody>
+					</table>
+				
+			</section>
+			<section>
+				<h2>Scope in JSP(cont.)</h2>
+				<table style="width:100%;">
+				<thead>
+							<tr>
+								<th>Scope</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>					
+						<tr>
+								<td>Session Scope</td>
+								<td>If a bean is declared with Session scope, it is available to all the JSP & Servlets that are accessed by a single user.</td>
+							<tr>
+						<tr>
+								<td>Application Scope</td>
+								<td>Application scope is the widest or most visible scope. A bean declared with application scope is visible to just about any servlet or JSP in the whole applications context, across user sessions.</td>
+							<tr>
+						</tbody>
+					</table>
+					
+			</section>
+			<section>
+				<h2>Questions?</h2>
+					
+			</section>
+			
+
+
+<section>
+				<h2>Spring Hello World</h2>
+					
+			</section>
+	<section>
+				<h2>Create web application with Maven</h2>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+mvn archetype:generate 
+-DarchetypeGroupId=org.apache.maven.archetypes 
+-DarchetypeArtifactId=maven-archetype-webapp 
+-DgroupId=com.aug -DartifactId=hellospring
+				</code></pre>
+				<p>Or clone hellospring from github</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+https://github.com/grandek/hellospring.git
+				</code></pre>
+			</section>
+ <section data-markdown>
+                    ## Add springmvc in pom.xml
+                    <pre><code contenteditable style="margin-top: 20px;">
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework &lt;/groupId&gt;
+		&lt;artifactId&gt;spring-web&lt;/artifactId&gt;
+		&lt;version&gt;4.1.1.RELEASE&lt;/version&gt;
+	&lt;/dependency&gt;
+
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
+		&lt;version&gt;4.1.1.RELEASE&lt;/version&gt;
+	&lt;/dependency&gt;						
+						
+                    </code></pre>
+                </section>
+				<section>
+				<h2>Modify web.xml</h2>
+				<p>Using a URL mapping in the web.xml file</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<web-app>
+    <servlet>
+       <servlet-name>hellospring</servlet-name>
+       <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+       <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+       <servlet-name>hellospring</servlet-name>
+       <url-pattern>/</url-pattern>
+    </servlet-mapping>
+</web-app>
+				</code></pre>
+					
+			</section>
+
+			<section>
+				<h2>Create hellospring-servlet.xml</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;beans&gt;
+        &lt;mvc:annotation-driven/&gt;
+        &lt;context:component-scan base-package="com.aug.*" /&gt;
+
+        &lt;bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"&gt;
+           &lt;property name="prefix" value="/WEB-INF/pages/" /&gt;
+           &lt;property name="suffix" value=".jsp" /&gt;
+        &lt;/bean&gt;
+&lt;/beans&gt;
+				</code></pre>
+			</section>
+			
+			<section>
+				<h2>Create HelloController</h2>
+				<ul  style="width:85%;">
+				<li>create package "com.aug.controller"</li>
+				<li>create HelloController.java</li>
+				</ul>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+public class HelloController implements Serializable {
+	@RequestMapping( value = "/hello", method= { RequestMethod.GET })
+	public String hellopage(){
+	     return "sample";
+	}
+	@RequestMapping( value = "/hello", method= { RequestMethod.POST })
+	public String hello(@RequestParam String name, Model model){
+	     model.addAttribute("name", name);
+	     return "hello";
+	}
+}
+				</code></pre>
+				
+			</section>
+				<section>
+				<h2>sample.jsp</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
+&lt;html&gt;
+&lt;head&gt;&lt;/head&gt;
+&lt;body&gt;
+	&lt;h2&gt;Spring MVC Hello World&lt;/h2&gt;
+	&lt;f:form action="${pageContext.request.contextPath}/hello" method="post"&gt;
+	      Name: &lt;input name="name"/&gt;
+	     &lt;input type="submit" value="submit"/&gt;
+	&lt;/f:form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+				</code></pre>
+					
+			</section>
+				<section>
+				<h2>hello.jsp</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
+&lt;html&gt;
+&lt;head&gt;&lt;/head&gt;
+&lt;body&gt;
+	&lt;h2&gt;Spring MVC Hello World&lt;/h2&gt;
+	Hello ${name}!!
+&lt;/body&gt;
+&lt;/html&gt;
+				</code></pre>
+				
+			</section>
+			<section>
+					<h2>Exercise</h2>
+					<ul>
+						<li>Apply @PathVariable to Request method</li>
+						<li>Create login page with</li>
+						<ul>
+							<li>UserName -Not null</li>
+							<li>Password - Not null & length >= 6</li>
+						</ul>
+						<li>Welcome page</li>
+						<ul>
+							<li>display Welcome + username</li>
+						</ul>
+					</ul>
+				</section>
+			
+			<section>
+				<h2>@DateTimeFormat</h2>
+				<p>Convert string to date</p>
+				<ul>
+						<li>Allow conversion of a string to date-class type</li>
+						<ul>
+							<li>java.lang.Long</li>						
+							<li>java.util.Date, java.sql.Date</li>
+							<li>java.util.Calendar</li>
+						</ul>
+						<li>Applies to @RequstParam and @PathVariable</li>
+					</ul>
+					
+			</section>
+		<section>
+				<h2>@DateTimeFormat</h2>
+					<p>eg.</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public String welcome(@RequestParam @DateTimeFormat(pattern="dd/MM/yyyy") Date loginDate ){
+	 // implementation omitted
+}
+				</code></pre>
+			</section>
+			<section>
+					<h2>Exercise</h2>
+					<ul>
+						<li>Add loginDate to login form</li>
+						<li>display date on JSP</li>						
+					</ul>
+				</section>
+
+					<section>
+				<h2>@ModelAttribute</h2>
+				<p>Used for preparing the model data, define the command object that would be bound with the HTTP request data</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+// Add one attribute
+// The return value of the method is added to the model under the name "object"
+// You can customize the name via @ModelAttribute("myObject")
+
+@ModelAttribute
+public MyObject getInitializedMyObject() {
+    return myService.getInitializedObject();
+}
+
+// Add multiple attributes
+
+@ModelAttribute
+public void populateModel(Model model) {
+    model.addAttribute(myService.getInitializedObject());
+    // add more ...
+}
+				</code></pre>
+			</section>
+			<section>
+				<h2>@ModelAttribute(cont.)</h2>
+					<p>@ModelAttribute on a method</p>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@ModelAttribute
+public MyObject getInitializedMyObject() {
+		return new MyObject();
+}
+
+				</code></pre>
+				<p>@ModelAttribute on a method argument</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public ModelAndView handleRequest(@ModelAttribute("myobject") MyObject myObject) {  
+        myObject.setValue("test");  
+        return new ModelAndView("myView");  
+}  
+				</code></pre>
+			</section>
+	<section>
+				<h2>ModelAttribute on JSP</h2>
+				<p>Used modelAttribute or commandName on form property</p>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;f:form action="${pageContext.request.contextPath}/user" modelAttribute="user" method="post"&gt;
+	&lt;f:input path="username"/&gt;
+	&lt;input type="submit" value="submit"/&gt;
+&lt;/f:form&gt;
+				</code></pre>
+				<p>or</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;f:form action="${pageContext.request.contextPath}/user" commandName="user" method="post"&gt;
+	&lt;f:input path="username"/&gt;
+	&lt;input type="submit" value="submit"/&gt;
+&lt;/f:form&gt;
+				</code></pre>
+				<p style="font-size: 22px;">***Form can map only one ModelAttribute</p>
+			</section>
+			<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Create User POJO class with</li>
+						<ul>
+							<li>FirstName </li>
+							<li>LastName </li>
+							<li>Birthday </li>
+							<li>UserName </li>
+							<li>Password</li>
+						</ul>
+						<li>Create UserController with</li>
+							<ul>
+							<li>@ModelAttribute </li>
+							<li>@RequestMapping </li>
+						</ul>
+						
+						<li>Map POJO class to JSP</li>						
+						<ul>
+							<li>Create user folder in pages folder</li>	
+							<li>create user page in user folder </li>
+						</ul>
+					</ul>
+			</section>
+			
+			
+			<section>
+				<h2>@SessionAttributes</h2>
+				<p>Using @SessionAttributes to store model attributes in the HTTP session</p>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+@SessionAttributes("user")
+public class UserController implements Serializable {
+	@RequestMapping(value = "/user", method = { RequestMethod.GET })
+	public String userpage(){
+	     return "/user/form";
+	}
+
+	 @RequestMapping( value = "/user", method= { RequestMethod.POST })
+	 public String user(@ModelAttribute("user") User user){
+	      return "/user/welcome";
+	 }
+	 
+	 @RequestMapping( value = "/usersave", method= { RequestMethod.GET })
+	 public String usersave(SessionStatus sessionStatus){
+	      sessionStatus.setComplete();
+	      return "redirect:user";
+	 }
+
+	@ModelAttribute("user")
+	public User newUser() {
+	     return new User();
+	}
+}
+				</code></pre>
+			</section>
+			
+			<section>
+				<h2>@SessionAttributes lifecycle</h2>
+				<ol>
+					<li>@SessionAttribute is initialized when you put the corresponding attribute into model</li>
+					<li>@SessionAttribute is updated by the data from HTTP parameters</li>
+					<li>@SessionAttributes are cleared when you call setComplete() on SessionStatus </li>
+				</ol>
+			</section>
+
+			<section>
+				<h2>SessionAttributes on JSP</h2>
+				<p>Use EL (expression language) is highly recommended</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+	${user.username}
+				</code></pre>
+				<p>eg.</p>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+	<input type="text" value="${user.username}" />
+				</code></pre>
+				
+			</section>
+
+			<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Store user on session</li>
+						<li>Display  user from session on JSP</li>						
+					</ul>
+			</section>
+
+			<section>
+				<h2>@CookieValue</h2>
+				<p>Access data within any http cookie. It automatically bind the cookie value with method argument.</p>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@RequestMapping("/hello", method = { RequestMethod.GET })
+public String hello(@CookieValue("helloCookie") String helloCookie) {
+	 // implementation omitted
+}
+				</code></pre>
+				<p style="font-size: 22px;">***If Spring does not find the cookie with name "helloCookie" in http request, it will throw an exception: java.lang.IllegalStateException: Missing cookie value 'helloCookie' of type</p>
+			</section>
+			<section>
+				<h2>@CookieValue(cont.)</h2>
+				<p>DefaultValue attribute of @CookieValue annotation</p>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@RequestMapping("/hello", method = { RequestMethod.GET })
+public String hello(@CookieValue("helloCookie", defaultValue="cookieHello") String helloCookie) {
+	 // implementation omitted
+}
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>Setting Http Cookie in Spring MVC</h2>
+				<p>Use HttpServletResponse class's method addCookie()</p>
+<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@RequestMapping("/hello", method = { RequestMethod.GET })
+public String hello(HttpServletResponse response) {
+	 response.addCookie(new Cookie("helloCookie", "CookieHello"));
+	 // implementation omitted
+}
+				</code></pre>
+			</section>
+			<section>
+				<h2>Set the cookie expire time</h2>
+				<p>Using setMaxAge method on Cookie class</p>
+<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@RequestMapping("/hello", method = { RequestMethod.GET })
+public String hello(HttpServletResponse response) {
+	Cookie helloCookie = new Cookie("helloCookie", "bar"); //bake cookie
+	helloCookie.setMaxAge(1000); //set expire time to 1000 sec
+	response.addCookie(helloCookie); //put cookie in response 
+}
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>Cookie on JSP</h2>
+				<p>Use EL (expression language) </p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+	${cookie.helloCookie.value}
+				</code></pre>
+								
+			</section>
+			<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Create JSP with counter cookie</li>
+						<li>When user visit page increase counter++</li>
+						<li>Display  counter from cookie on JSP</li>						
+					</ul>
+			</section>
+			
+			<section>
+				<h2>Validation</h2>
+				<p>Spring provides a simplified set of APIs and supporting classes for validating domain objects</p>
+				<!--p>Validator interface that use to validate objects, using an Errors object while validation failures</p-->
+				
+					<p>Usually validation method is implement Spring Validator </p>
+					<ul>
+						<li><a>public boolean supports(Class)</a></li>
+						<li><a>public void validate(Object, Errors)</a></li>
+				
+					</ul>
+			
+			</section>
+
+				
+			<section>
+				<h2>Example</h2>
+				<p>Person class</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public class Person {
+
+    private String name;
+    private int age;
+
+    // the usual getters and setters...
+}
+				</code></pre>
+					<!--ul>
+						<li>Person class</li>
+						<ul>
+						<li>name</li>
+						<li>age</li>
+					</ul>
+						
+					</ul-->
+			</section>
+
+				
+			<section>
+				<h2>Person Validator</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Component
+public class PersonValidator implements Validator {
+
+    public boolean supports(Class clazz) {
+        return Person.class.equals(clazz);
+    }
+
+    public void validate(Object obj, Errors errors) {
+        ValidationUtils.rejectIfEmpty(errors, "name", null, "name.empty");
+
+        Person p = (Person) obj;
+		if ( p.getAge()  <  0 ) {  errors.rejectValue("age", null , "negativevalue"); } 
+         else if ( p.getAge()  >  110 ) {  errors.rejectValue("age", null, "too.old"); }
+    }
+}
+				</code></pre>
+				
+			</section>
+
+			<section>
+				<h2>Validator in Controller</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public class PersonController implements Serializable {
+	
+	@Autowired private PersonValidator personValidator;
+
+	@RequestMapping( value = "/person", method= { RequestMethod.POST })
+	 public String user(@ModelAttribute("person") Person person,BindingResult result){
+
+			     personValidator.validate(person, result);
+			     if (result.hasErrors()) {
+				           return "/person/form";
+			     } else {
+				          // implement operation
+			     }
+			     return "/person/welcome";
+		}
+}
+				</code></pre>
+					
+			</section>
+
+			<section>
+				<h2>Display Error on JSP</h2>
+								<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+
+&lt;style&gt;
+          .error {
+			     color: #ff0000;
+			     padding-left: 5px;
+           }
+&lt;/style&gt;
+
+				</code></pre>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+
+&lt;f:form action="${pageContext.request.contextPath}/user" modelAttribute="user" method="post"&gt;
+	&lt;f:input path="name" /&gt;
+	&lt;f:errors path="name"  cssClass="error"/&gt;
+&lt;/f:form&gt;
+
+				</code></pre>
+					
+			</section>
+
+			<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Use Validator for User</li>
+						<ul>
+							<li>FirstName - Not null</li>
+							<li>LastName - Not null</li>
+							<li>Birthday - Not null</li>
+							<li>UserName - Not null & Unique</li>
+							<li>Password - Not null & length >= 6</li>
+						</ul>
+						<li>Map errors to JSP</li>						
+					</ul>
+			</section>
+
+	<section>
+				<h2>Validation Trick</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public class PersonController implements Serializable {
+
+	@RequestMapping( value = "/validatePerson", method= { RequestMethod.POST })
+	 public String user(@ModelAttribute("person") Person person,Errors errors){
+
+			     ValidationUtils.rejectIfEmpty(errors, "name", null, "name.empty");
+				     if ( p.getAge()  <  0 ) {  errors.rejectValue("age", null , "negativevalue"); } 
+				     else if ( p.getAge()  >  110 ) {  errors.rejectValue("age", null, "too.old"); }
+		
+			     if (errors.hasErrors()) {
+				           return "/person/form";
+			     } 
+			     return "/person/welcome";
+		}
+}
+				</code></pre>
+					
+			</section>
+			<section>
+				<h2>Message Resource</h2>
+				<p>In Spring, you can use ResourceBundleMessageSource to resolve text messages from properties file<p>
+					
+			</section>
+
+			<section>
+				<h2>Message Resource Configuration</h2>
+				<p>Append bean to hellospring-servlet.xml</p>
+						<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages"></property>
+        <property name="defaultEncoding" value="UTF-8"></property>
+</bean>
+				</code></pre>
+				<p style="font-size: 22px;">basename - name of properties file</p>
+			</section>
+
+<section>
+				<h2>Create Properties file</h2>
+				<p>message_en.properties</p>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+user.username= Username
+user.password= Password
+
+user.required.username=Username is required!!
+user.required.password=Password is required!!
+user.required.repassword=Re-Password is required!!
+user.mismatch.password=Re-Password mismatch!!
+user.required.password.length=Please enter at least {0} characters!!
+user.duplicate.username = Username is duplicate!!
+				</code></pre>
+				<p>message_th.properties</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+user.username= ชื่อผู้ใช้งาน
+user.password= รหัสผ่าน
+
+user.required.username=รหัสผู้ใช้ห้ามว่าง\!\!
+user.required.password=รหัสผ่านห้ามว่าง\!\!
+user.required.repassword=ยืนยันรหัสผ่านห้ามว่าง\!\!
+user.mismatch.password=ยืนยันรหัสผ่านไม่ตรงกัน\!\!
+user.required.password.length=รหัสผ่านยาว  {0} ตัวขึ้นไป\!\!
+user.duplicate.username = รหัสผู้ใช้งานมีอยู่แล้ว\!\!
+				</code></pre>
+			</section>
+			
+			<section>
+				<h2>Message Resource on Controller</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+MessageSource.class
+getMessage(code, args, defaultMessage, locale)
+
+				</code></pre>
+				<p>eg.</p>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Autowired private MessageSource message;
+
+@RequestMapping(value = "/hello", method = RequestMethod.GET)
+public String hello(Locale locale, ModelMap model) {
+		message.getMessage("msg.success", new Object[]{param}, "success", locale)
+		return "hello";
+}
+
+				</code></pre>
+			</section>
+			
+			<section>
+				<h2>Message Resource on JSP</h2>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
+&lt;spring:message code="user.required.password.length" arguments="6"/&gt;
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Apply message resource to </li>							
+						<ul>
+						<li>Controller & Validator </li>						
+						<li>JSP</li>		
+						</ul>
+					</ul>
+			</section>
+			<section>
+				<h2>Spring MVC Internationalization (i18n)</h2>
+				<p>Spring MVC support for internationalization (i18n) through the use of Spring interceptors, Locale Resolvers and Resource Bundles for different locales.</p>
+
+					
+			</section>
+
+			<section>
+				<h2>i18n Configuration</h2>
+				<p>Append bean to hellospring-servlet.xml</p>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<mvc:interceptors>
+	<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			     &lt;property name="paramName" value="locale" /&gt;
+	</bean>
+</mvc:interceptors>
+
+<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		&lt;property name="defaultLocale" value="en" /&gt;
+</bean>
+				</code></pre>
+				
+			</section>
+<section>
+				<h2>How to change locale</h2>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+http://localhost:8080/hellospring/user?locale=th
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Create language link to chage localization</li>							
+						
+					</ul>
+			</section>
+
+			<section>
+				<h2>@InitBinder</h2>
+				<p>Configure web data binding directly within controller, that will be used to populate command and form object arguments of annotated handler methods.</p>
+			
+			</section>
+
+			<section>
+				<h2>InitBinder Configuration</h2>
+			<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+@SessionAttributes("user")
+public class UserController implements Serializable {
+	@InitBinder
+		public void initBinder(WebDataBinder binder) {
+		     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH);
+		     binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	}
+}
+				</code></pre>
+			</section>
+			<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Add @InitBinder to controller</li>
+						<ul>
+							<li>binder Date</li>
+							
+						</ul>								
+						<li>validate Birthday</li>
+					</ul>
+			</section>
+			<section>
+				<h2>PropertyEditor</h2>
+					<p>PropertyEditor instances are used to convert property values expressed as strings to the actual complex type of the property</p>
+			</section>
+				<section>
+				<h2>Extends PropertyEditorSupport</h2>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Component
+public class DepartmentEditor extends PropertyEditorSupport{
+	@Autowired private DepartmentService service;
+	@Override
+	public void setAsText(String text) {
+		     this.setValue(null);
+		     if (!"".equals(text)) {
+			          Department department = service.find(Integer.valueOf(text));
+			          this.setValue(department);
+		     }
+	}
+
+	@Override
+	public String getAsText() {
+		     String text = "";
+		     Department department = (Department) this.getValue();
+		     if (department != null) {
+			          text = Integer.toString(rs.getDepartmentId());
+		     }
+		     return text;
+	}
+
+}
+
+		</code></pre>
+			</section>
+<section>
+				<h2>Configuration on Controller</h2>
+			<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+@SessionAttributes("user")
+public class UserController implements Serializable {
+	@Autowire DepartmentEditor departmentEditor;
+	@InitBinder
+		public void initBinder(WebDataBinder binder) {
+		     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH);
+		     binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+
+		     binder.registerCustomEditor(Department.class, this.departmentEditor);
+	}
+}
+				</code></pre>
+			</section>
+			<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Modify User class to Hibernate Entity</li>						
+						<li>Create Department Entity class with</li>
+							<ul>
+							<li>Department Id </li>
+							<li>Department Name </li>
+							<li>Relation  to User @OneToMany </li>							
+							</ul>
+						<!--li>Create Role Entity class with</li>
+							<ul>
+							<li>Role Id </li>
+							<li>Role Name </li>
+							<li>Relation  to User @ManyToMany </li>	
+							<li>Join Table name "UserRole" </li>	
+							</ul>
+						<li>Create Menu Entity class with</li>
+						<ul>
+							<li>Menu Id </li>
+							<li>Menu Name </li>
+							<li>Relation  to Role @ManyToMany </li>	
+							<li>Join Table name "RoleMenu" </li>	
+						</ul-->
+						<li>Create CRUD  User </li>
+							
+					</ul>
+			</section>
+
+			<section>
+				<h2>SiteMesh</h2>
+					<p>SiteMesh is a lightweight and flexible framework that applies the Gang of Four decorator pattern to allow a clean separation of content from presentation.</p>
+			</section>
+
+			<section>
+				<h2>Why Use SiteMesh</h2>
+				<p>Write your content once and present it in many different ways</p>
+				<img  style="border:0;" width="778" height="420" src="img/sitemesh.png">
+				<p>SiteMesh is easy to learn. 5 minutes to setup, and 10 minutes to start being useful.</p>
+			</section>
+
+			<section>
+				<h2>Setup Library File</h2>
+				<p>Download from <a>http://wiki.sitemesh.org/wiki/display/sitemesh/Download</a></p>
+				<p>Copy the SiteMesh jar file to WEB-INF/lib directory</p>
+				<p>or Add maven depandency</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<dependency>
+	<groupId>opensymphony</groupId>
+	<artifactId>sitemesh</artifactId>
+	<version>2.4.2</version>
+</dependency>
+
+		</code></pre>
+			</section>
+			<section>
+				<h2>Add SiteMesh Filter</h2>
+				<p>Modify web.xml</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<filter>
+	<filter-name>sitemesh</filter-name>
+	<filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
+</filter>
+ 
+<filter-mapping>
+	<filter-name>sitemesh</filter-name>
+	<url-pattern>/*</url-pattern>
+</filter-mapping>
+		</code></pre>
+			</section>
+			<section>
+				<h2>Define Decorator and Pattern</h2>
+				<p>Create the a decorators.xml file in  WEB-INF directory</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/decorators">
+    <!-- Excludes will never be decorated by Sitemesh. -->
+    <excludes>
+        <pattern>/*login*</pattern>
+        <pattern>/*logout*</pattern>
+        <pattern>/*accessdenied*</pattern>
+        <pattern>/403.jsp*</pattern>
+        <pattern>/404.jsp*</pattern>
+        <pattern>/*modal*</pattern>;
+        <pattern>/*Popup*</pattern>
+        <pattern>/*view*</pattern>
+    </excludes>
+    <decorator name="default" page="main.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+</decorators>
+		</code></pre>
+			</section>
+			<section>
+				<h2>Setup Decorators</h2>
+				<p>create main.jsp in  decorators folder in webapp</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;title&gt;&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Header&lt;/h1&gt;
+    &lt;p&gt;&lt;b&gt;Navigation&lt;/b&gt;&lt;/p&gt;
+    &lt;hr /&gt;
+    &lt;decorator:body /&gt;
+    &lt;hr /&gt;
+    &lt;h1&gt;Footer&lt;/b&gt;&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+		</code></pre>
+			</section>
+			<section>
+				<h2>Exercise</h2>
+				<ul><li>Apply decorator to WebApplication</li></ul>
+					
+			</section>
+
+			<section>
+				<h2>Ajax & JSON</h2>
+			</section>
+			
+			<section>
+			<h2>What?</h2>
+				<img style="border:none; background:none;box-shadow:none;" width="621" height="400" src="img/spring/ajaxjson.png">
+			</section>
+			<section>
+				<h3>Ajax (<a>A</a>synchronous <a>J</a>avaScript <a>A</a>nd <a>X</a>ML)</h3>
+				<ul>
+						<p>
+						Ajax is the art of exchanging data with a server, and updating parts of a web page - without reloading the whole page.
+						</p>
+					</ul>
+						<img  style="border:0;" width="774" height="264" src="img/ajax.png">
+			</section>
+		
+			<section>
+				<h2>A typical Ajax request</h2>
+				<img  style="border:0;" width="500" height="280" src="img/ajax_request.png">
+				<p>It Based on Internet Standards and uses a combination of :</p>				
+				<ul>
+						<li>XMLHttpRequest object (to exchange data with a server)</li>
+						<li>JavaScript/DOM (to display/interact with the information)</li>
+						<li>CSS (to style the data)</li>
+						<li>XML/JSON (often used as the format for transferring data)</li>
+					</ul>				
+				
+			</section>
+
+	<section>
+				<h2>A typical Ajax request(cont.)</h2>		
+
+					<ol>
+						<li>user clicks, invoking event handler</li>
+						<li>that handler's JS code creates an XMLHttpRequest object</li>
+						<li>XMLHttpRequest object requests a document from a web server</li>
+						<li>server retrieves appropriate data, sends it back</li>
+						<li>XMLHttpRequest fires event to say that the data has arrived</li>
+						<ul>
+							<li>this is often called a callback</li>
+							<li>you can attach a handler to be notified when the data has arrived</li>
+						</ul>
+						<li>your callback event handler processes the data and displays it</li>
+					</ol>
+			</section>
+	<section>
+				<h2>Example</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+					<script>
+function loadXMLDoc(){
+	var xmlhttp;
+	if (window.XMLHttpRequest)  {// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	 }else {// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	 }
+	xmlhttp.onreadystatechange=function()  {
+		if (xmlhttp.readyState==4 && xmlhttp.status==200)		{
+			document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+		}
+	  }
+	xmlhttp.open("GET","ajax_info.txt",true);
+	xmlhttp.send();
+}
+</script>
+
+<div id="myDiv"><h2>Let AJAX change this text</h2></div>
+<button type="button" onclick="loadXMLDoc()">Change Content</button>
+				</code></pre>
+				
+			</section>
+
+			<section>
+				<h2>JSON (<a>J</a>ava<a>S</a>cript <a>O</a>bject <a>N</a>otation)</h2>
+				<ul>
+						<p>What?</p>						
+						<ul>
+							<li>JSON is a lightweight data-interchange format</li>
+							<li>JSON is language independent *</li>
+							<li>JSON is "self-describing" and easy to understand</li>
+						</ul>
+					</ul>
+			</section>
+
+			<section>
+				<h2>JSON Syntax Rules</h2>
+				<p>JSON syntax is derived from JavaScript object notation syntax</p>
+				
+					<table width="90%">
+					<thead>
+						<tr><th></th><th></th></tr>
+					</thead>
+					<tbody>
+					<tr>
+					<td style="font-size: 25px;">Data is in name/value pairs</td>
+					<td style="padding:0;">
+					<pre style="width:100%;margin:0;"><code data-trim contenteditable style="font-size: 18px; margin-top: 0px;">
+"firstName":"Ekkachai"
+					</code></pre>
+					</td>
+					</tr>
+					<tr>
+					<td style="font-size: 25px;">Data is separated by commas</td>
+					<td style="padding:0;">
+						<pre style="width:100%;margin:0;"><code data-trim contenteditable style="font-size: 18px; margin-top: 0px;">
+"firstName":"Ekkachai", "lastName":"Kaewprasert"
+					</code></pre>
+					</td>
+					</tr>
+					<tr>
+					<td style="font-size: 25px;">Curly braces hold objects</td>
+					<td style="padding:0;">
+					<pre style="width:100%;margin:0;"><code data-trim contenteditable style="font-size: 18px; margin-top: 0px;">
+{"firstName":"Ekkachai", "lastName":"Kaewprasert"}
+					</code></pre>
+					</td>
+					</tr>
+					<tr>
+					<td style="font-size: 25px;">Square brackets hold arrays</td>
+					<td style="padding:0;">
+					<pre style="width:100%;margin:0;"><code data-trim contenteditable style="font-size: 18px; margin-top: 0px;">
+ "trainer" : [
+	{"firstName":"Ekkachai", "lastName":"Kaewprasert"},
+	{"firstName":"Ekkachai", "lastName":"Kaewprasert"}
+]
+					</code></pre>
+					</td>
+					<tr>
+					</tbody>
+					</table>
+			</section>
+
+ 			<section>
+				<h2>Example</h2>
+				<pre style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+{
+	"firstName" : "Ekkachai",
+	"lastName" : "Kaewprasert",
+	 "course" : [
+		{"name":"Java Debelop Tools", "hour":8},
+		{"name":"Source Control", "hour":8},
+		{"name":"Jasper & iReport", "hour":16},
+		{"name":"StrutsMVC", "hour":16},
+		{"name":"SpringMVC", "hour":24}
+	]
+}
+					</code></pre>
+			</section>
+
+			<section>
+				<h2>JSON Values</h2>				
+					<ul>
+				
+						<li>A number (integer or floating point)</li>
+						<li>A string (in double quotes)</li>
+						<li>A Boolean (true or false)</li>
+						<li>An array (in square brackets)</li>
+						<li>An object (in curly braces)</li>
+						<li>null</li>
+					</ul>
+			</section>
+
+			
+			<section>
+				<h2>JSON in JavaScript</h2>
+					<ul>
+						<li><a>JSON.stringify</a> turns an object in to a JSON text and stores that JSON text in a string</li>
+						<li><a>JSON.parse</a> turns a string of JSON text into an object.</li>
+					</ul>
+										<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+//define a json object
+var employee = { "name": "John Johnson", "street": "Oslo West 16", "phone": "555 1234567" };
+
+//use JSON.stringify to convert it to json string
+var jsonstring = JSON.stringify(employee);
+
+//convert json string to json object using JSON.parse function
+var jsonobject = JSON.parse(jsonstring);
+
+		</code></pre>
+			</section>
+
+			<section>
+				<h2>JSON in SpringMVC</h2>
+					<p>Add JSON dependency</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<dependency>
+	<groupId>com.fasterxml.jackson.core</groupId>
+	<artifactId>jackson-core</artifactId>
+	<version>2.4.1</version>
+</dependency>
+<dependency>
+	<groupId>com.fasterxml.jackson.core</groupId>
+	<artifactId>jackson-databind</artifactId>
+	<version>2.4.1</version>
+</dependency>
+<dependency>
+	<groupId>com.fasterxml.jackson.core</groupId>
+	<artifactId>jackson-annotations</artifactId>
+	<version>2.4.1</version>
+</dependency>
+		</code></pre>
+			</section>
+
+
+			<section>
+				<h2>Jackson infinite recursion problem</h2>
+				<p>In the following example we have two entities – “Category” and “Product” – with a simple one-to-many relationship</p>
+	<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public class Category(){
+	private Integer id;
+	private String name;
+	@OneToMany
+	//FetchType Eager
+	private List&lt;Product&gt; products;
+	
+}
+
+public class Product(){
+	private Integer id;
+	private String name;
+	@ManyToOne
+	private Category category;
+
+}
+		</code></pre>
+			</section>
+
+			
+			<section>
+				<h2>JSON Annotations</h2>
+					<ul>
+						<li>@JsonManagedReference, @JsonBackReference</li>
+						<li>@JsonIdentityInfo</li>
+						<li>@JsonIgnore</li>
+						<li>@JsonView</li>
+						<li>@JsonFormat</li>
+					</ul>
+
+			</section>
+
+				<section>
+				<h2>Use @JsonManagedReference, @JsonBackReference</h2>
+	<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public class Category(){
+	private Integer id;
+	private String name;
+	@JsonBackReference
+	@OneToMany	
+	private List&lt;Product&gt; products;
+	
+}
+
+public class Product(){
+	private Integer id;
+	private String name;
+	@JsonManagedReference
+	@ManyToOne
+	private Category category;
+
+}
+		</code></pre>				
+		<ul>
+		<li><a>@JsonManagedReference</a> is the forward part of reference – the one that gets serialized normally.</li>
+		<li><a>@JsonBackReference</a> is the back part of reference – it will be omitted from serialization.</li>
+		</ul>
+
+			</section>
+		<section>
+				<h2>@JsonManagedReference, @JsonBackReference Example</h2>
+					<pre style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+[
+	{"productId":1,"productName":"Chang","price":60,"category":{"categoryId":1,"categoryName":"Beverages"}},
+	{"productId":2,"productName":"Leo","price":55,"category":{"categoryId":1,"categoryName":"Beverages"}},
+	{"productId":3,"productName":"Singha","price":65,"category":{"categoryId":1,"categoryName":"Beverages"}},
+	{"productId":4,"productName":"Massaman","price":220,"category":{"categoryId":2,"categoryName":"Food"}},
+	{"productId":5,"productName":"Friedrice","price":220,"category":{"categoryId":2,"categoryName":"Food"}},
+	{"productId":9,"productName":"11122","price":111,"category":{"categoryId":2,"categoryName":"Food"}}
+]
+		</code></pre>
+		<pre style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+[
+	{"categoryId":1,"categoryName":"Beverages"},
+	{"categoryId":2,"categoryName":"Food"}
+]
+</code></pre>
+			</section>
+				<section>
+				<h2>Use @JsonIdentityInfo</h2>
+	<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class Category(){
+	private Integer id;
+	private String name;
+	@OneToMany	
+	private List&lt;Product&gt; products;
+	
+}
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class Product(){
+	private Integer id;
+	private String name;
+	@ManyToOne
+	private Category category;
+
+}
+		</code></pre>				
+		<ul>
+		<li><a>@JsonIdentityInfo</a> - full object and object identity, and other references to the object as reference values.</li>
+		<li><a>NOT support</a> for JSON Array types (Java arrays or Lists) or Java Map types</li>
+		</ul>
+
+			</section>
+		<section>
+				<h2>@JsonIdentityInfo Example</h2>
+					<pre  style="width:90%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+[
+	{"categoryId":1,"categoryName":"Beverages",
+		"products":[{"productId":3,"productName":"Singha","price":65,"category":1},			
+				{"productId":2,"productName":"Leo","price":55,"category":1},
+				{"productId":1,"productName":"Chang","price":60,"category":1}
+			]
+	},1,1,
+	{"categoryId":2,"categoryName":"Food",
+		"products":[{"productId":4,"productName":"Massaman","price":220,"category":2},
+				{"productId":5,"productName":"Fried rice","price":220,"category":2}
+			]
+	},2
+]
+ 						</code></pre>
+					<pre style="width:90%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+[
+	{"productId":1,"productName":"Chang","price":60,
+		"category":{"categoryId":1,"categoryName":"Beverages",
+			"products":[{"productId":3,"productName":"Singha","price":65,"category":1},
+					{"productId":2,"productName":"Leo","price":55,"category":1}
+			,1 ]
+		}
+	},2,3,
+	{"productId":4,"productName":"Massaman","price":220,
+		"category":{"categoryId":2,"categoryName":"Food",
+			"products":[{"productId":5,"productName":"Fried rice","price":220,"category":2},4]
+		}
+	},5
+]
+		</code></pre>
+			</section>
+	<section>
+				<h2>Use @JsonIgnore</h2>
+	<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public class Category(){
+	private Integer id;
+	private String name;
+	@JsonIgnore
+	@OneToMany	
+	private List&lt;Product&gt; products;
+	
+}
+public class Product(){
+	private Integer id;
+	private String name;
+	@ManyToOne
+	private Category category;
+
+}
+		</code></pre>				
+		<ul>
+		<li><a>@JsonIgnore</a> annotation to simply ignore one of the sides of the relationship, thus braking the chain.</li>
+		
+		</ul>
+
+			</section>
+		<section>
+				<h2>@JsonIgnore Example</h2>
+					<pre style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+[
+	{"productId":1,"productName":"Chang","price":60,"category":{"categoryId":1,"categoryName":"Beverages"}},
+	{"productId":2,"productName":"Leo","price":55,"category":{"categoryId":1,"categoryName":"Beverages"}},
+	{"productId":3,"productName":"Singha","price":65,"category":{"categoryId":1,"categoryName":"Beverages"}},
+	{"productId":4,"productName":"Massaman","price":220,"category":{"categoryId":2,"categoryName":"Food"}},
+	{"productId":5,"productName":"Friedrice","price":220,"category":{"categoryId":2,"categoryName":"Food"}},
+	{"productId":9,"productName":"11122","price":111,"category":{"categoryId":2,"categoryName":"Food"}}
+]
+		</code></pre>
+		<pre style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+[
+	{"categoryId":1,"categoryName":"Beverages"},
+	{"categoryId":2,"categoryName":"Food"}
+]
+</code></pre>
+				</section>
+				<section>
+				<h2>Use @JsonView</h2>
+	<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public class Views {
+	public static class Public { }
+	public static class Internal extends Public { }
+}
+public class Category(){
+	@JsonView(Views.Public.class)
+	private Integer id;
+	@JsonView(Views.Public.class)
+	private String name;
+	@JsonView(Views.Internal.class)
+	@OneToMany	
+	private List&lt;Product&gt; products;	
+}
+public class Product(){
+	@JsonView(Views.Public.class)
+	private Integer id;
+	@JsonView(Views.Public.class)
+	private String name;
+	@JsonView(Views.Public.class)
+	@ManyToOne
+	private Category category;
+}
+		</code></pre>				
+		<ul>
+		<li><a>@JsonView</a> annotation exclude one side of the relationship.</li>
+		
+		</ul>
+
+			</section>
+
+						<section>
+				<h2>@JsonView in Controller</h2>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@JsonView(Views.Public.class)
+@RequestMapping(value="/pet", method={RequestMethod.POST})
+public @ResponseBody Pet getPet(@RequestBody Pet pet,, Model model) {
+    // implementation omitted
+}
+				</code></pre>		
+
+			</section>
+					<section>
+				<h2>@JsonView Example</h2>
+					<pre style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@JsonView(Views.Public.class)
+[
+	{"productId":1,"productName":"Chang","price":60,"category":{"categoryId":1,"categoryName":"Beverages"}},
+	{"productId":2,"productName":"Leo","price":55,"category":{"categoryId":1,"categoryName":"Beverages"}},
+	{"productId":3,"productName":"Singha","price":65,"category":{"categoryId":1,"categoryName":"Beverages"}},
+	{"productId":4,"productName":"Massaman","price":220,"category":{"categoryId":2,"categoryName":"Food"}},
+	{"productId":5,"productName":"Friedrice","price":220,"category":{"categoryId":2,"categoryName":"Food"}},
+	{"productId":9,"productName":"11122","price":111,"category":{"categoryId":2,"categoryName":"Food"}}
+]
+		</code></pre>
+		<pre style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@JsonView(Views.Internal.class)
+java.lang.StackOverflowError
+</code></pre>
+				</section>
+			<section>
+				<h2>Use @JsonFormat</h2>
+	<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public class Employee(){
+	private Integer id;
+	private String name;
+	@JsonFormat(pattern = "dd-MM-yyyy", shape=JsonFormat.Shape.STRING)
+	private Date birthDay;
+	
+}
+		</code></pre>				
+		<ul>
+		<li><a>@JsonFormat</a> annotation control the date format</li>
+		
+		</ul>
+
+			</section>
+		<section>
+				<h2>@JsonFormat Example</h2>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+[
+	{"employeeId":1,"firstName":"Nancy","lastName":"Peacock","birthDay":"03-04-1990"},
+	{"employeeId":2,"firstName":"Andrew","lastName":"Fuller","birthDay":"03-04-1990"},
+	{"employeeId":3,"firstName":"Steven","lastName":"King","birthDay":"03-04-1990"}
+]
+		</code></pre>
+				</section>
+
+			<section>
+				<h2>Spring Annotations</h2>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@RequestMapping
+(value="/pet", method=RequestMethod.POST,consumes="application/json", produces="application/json")
+public @ResponseBody Pet getPet(@RequestBody Pet pet,, Model model) {
+    // implementation omitted
+}
+				</code></pre>
+					<ul>
+						<li>@ResponseBody</li>
+						<li>@RequestBody</li>
+						<li>@RequestMapping</li>
+						<ul>
+							<li>consumes</li>
+							<li>produces</li>
+						</ul>		
+					</ul>					
+
+			</section>
+					<section>
+				<h2>JQuery Ajax</h2>
+				<p></p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;script type="text/javascript"&gt;
+$( function(){
+	$("selector").on( "click", function(){
+		$.ajax({
+			url : 'URL',
+			type: 'POST',
+			contentType: 'application/json',
+			data: Data,
+			dataType: "json",
+			success : function(data) { },
+			error: function (jqXHR,  textStatus,  error) { }
+		});
+	});		
+});
+&lt;/script&gt;
+		</code></pre>
+			</section>
+			<section>
+				<h2>Example JSP</h2>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;html lang="en"&gt;
+&lt;head&gt;...&lt;/head&gt;
+&lt;body&gt;
+	<h2>Sample Ajax with Spring MVC</h2>
+	<select id="ajaxRequest">
+		<option value="Product">Product</option>
+		<option value="Category">Category</option>
+		<option value="Customer">Customer</option>
+		<option value="Employee">Employee</option>
+		<option value="Orders">Orders</option>
+		<option value="OrderDetails">OrderDetails</option>
+	</select>
+	<button id="searchBtn" type="button" class="btn btn-sm btn-default">Test Ajax</button>
+	
+	<div id="outputajax"></div>
+&lt;/body&gt;
+&lt;/html&gt;
+		</code></pre>
+			</section>
+		<section>
+				<h2>Example JavaScript</h2>
+				<p></p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;script type="text/javascript"&gt;
+$( function(){
+	$("#searchBtn").click(function(){
+		$.ajax({
+			url : '${pageContext.request.contextPath}/ajax/get'+$("#ajaxRequest").val()+'List/',
+			type: 'POST',
+			contentType: 'application/json',
+			dataType: "json",
+			success : function(data) {
+				$('#outputajax').text(JSON.stringify(data));
+			},
+			error: function (jqXHR,  textStatus,  error) {
+				$('#outputajax').text(jqXHR+" : "+ textStatus+" : "+error); }
+		});
+	});		
+});
+&lt;/script&gt;
+		</code></pre>
+			</section>
+
+			<section>
+				<h2>Example Controller</h2>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+public class SampleAjaxController  {
+	@Autowired private ProductService productService;
+	
+	@RequestMapping(value="/sampleajax", method ={RequestMethod.GET})
+	public String samplePage(){
+		return "ajax/sampleAjax";
+	}
+	@RequestMapping(value="/ajax/getProductList/", method ={RequestMethod.POST})
+	public @ResponseBody List&lt;Product&gt; listProduct(){
+		return productService.findAll();
+	}
+}
+				</code></pre>
+			
+
+			</section>
+						<section>
+				<h2>Result</h2>
+			<img  style="border:0;" width="821" height="264" src="img/spring/sampleajax.png">	
+
+			</section>
+
+			<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Create Ajax Function with</li>
+						<ul>
+							<li>Insert</li>
+							<li>Select</li>
+							<li>Update</li>
+							<li>Delete</li>
+						</ul>
+					</ul>
+
+			</section>
+
+			<section>
+				<h2>JQuery DataTable</h2>
+
+			</section>
+			<section>
+				<h2>DataTables Table plug-in for jQuery</h2>
+				<p>DataTables is a plug-in for the <a>jQuery</a> Javascript library. That will add advanced interaction controls to any HTML table.</p>
+
+			</section>
+
+			<section>
+				<h2>DataTables Features</h2>
+					<ul>
+						<li>Pagination, instant search and multi-column ordering	</li>	
+						<li>Supports almost any data source:</li>
+						<ul>
+							<li><a>DOM</a>, <a>Javascript</a>, <a>Ajax</a> and <a>server-side processing</a></li>
+						</ul>
+						<li>Easily theme-able: <a>DataTables</a>, <a>jQuery UI</a>, <a>Bootstrap</a>, <a>Foundation</a></li>
+						<li>Wide variety of <a>extensions</a> inc. <a>Editor</a>, <a>TableTools</a>, <a>FixedColumns</a> and more</li>
+						<li>Extensive <a>options</a> and a beautiful, expressive <a>API</a></li>
+						<li>Fully <a>internationalisable</a></li>
+						<li>etc.</li>
+					</ul>
+			</section>
+
+			<section>
+				<h2>Easy is it to use DataTables?</h2>
+				<p>Call function to initialise the table</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+$(document).ready(function(){
+    $('#myTable').DataTable();
+});
+				</code></pre>
+				
+				<p>Include two files additional in your page</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+https//cdn.datatables.net/1.10.8/css/jquery.dataTables.min.css
+				</code></pre>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+https//cdn.datatables.net/1.10.8/js/jquery.dataTables.min.js
+				</code></pre>
+				
+			</section>
+
+			<section>
+				<h2>DataTables Installation</h2>
+					<ul>
+						<li>Requirements</li>
+						<ul>
+							<li>Dependencies</li>
+							<li>HTML table</li>
+						</ul>
+						<li>Including Javascript / CSS</li>
+						<ul>
+							<li>Using a CDN</li>
+							<li>Locally</li>
+						</ul>
+						<li>Initialising DataTables</li>
+					</ul>
+					<p>Official site : <a href=""https://datatables.net/>https://datatables.net/</a></p>
+			</section>
+<section>
+				<h2>Requirements</h2>
+				<ul>
+						<li>Dependencies</li>
+						<ul>
+						<li>jQuery 1.7 or newer will work with DataTables</li>
+						</ul>
+						<li>HTML</li>
+						<ul>
+							<li>HTML table with a header (<a>thead Tag</a>) and a body (<a>tbody Tag</a>). An optional footer (<a>tfoot Tag</a>) can also be used.</li>
+						</ul>
+					</ul>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<table id="table_id" class="display">
+    <thead>
+        <tr>
+            <th>Column 1</th>
+            <th>Column 2</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Row 1 Data 1</td>
+            <td>Row 1 Data 2</td>
+        </tr>
+        <tr>
+            <td>Row 2 Data 1</td>
+            <td>Row 2 Data 2</td>
+        </tr>
+    </tbody>
+</table>
+				</code></pre>
+					
+			</section>
+			<section>
+				<h2>Including Javascript / CSS</h2>
+				<ul>
+						<li>CDN</li>
+					</ul>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;!-- DataTables CSS --&gt;
+&lt;link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.8/css/jquery.dataTables.css"&gt;
+
+&lt;!-- jQuery --&gt;
+&lt;script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-1.10.2.min.js"&gt; &lt;/script&gt;
+
+&lt;!-- DataTables --&gt;
+&lt;script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.8/js/jquery.dataTables.js"&gt;&lt;/script&gt;
+
+				</code></pre>
+					<ul>
+						<li>Locally</li>
+					</ul>
+					<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;!-- DataTables CSS --&gt;
+&lt;link rel="stylesheet" type="text/css" href="/DataTables-1.10.8/media/css/jquery.dataTables.css"&gt;
+
+&lt;!-- jQuery --&gt;
+&lt;script type="text/javascript" charset="utf8" src="/DataTables-1.10.8/media/js/jquery.js"&gt; &lt;/script&gt;
+
+&lt;!-- DataTables --&gt;
+&lt;script type="text/javascript" charset="utf8" src="/DataTables-1.10.8/media/js/jquery.dataTables.js"&gt; &lt;/script&gt;
+
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>Datatables in Sping MVC</h2>
+				<p>Use &lt;mvc:resources&gt; map static folder to root directory of server</p>
+			<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+	&lt;mvc:resources mapping="/static/**" location="/" /&gt;
+				</code></pre>
+					<p>Including Javascript / CSS</p>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;!-- DataTables CSS --&gt;
+&lt;link rel="stylesheet" type="text/css" href="&lt;c:url value="/static/DataTables-1.10.8/media/css/jquery.dataTables.css"/&gt;"&gt;
+
+&lt;!-- jQuery --&gt;
+&lt;script type="text/javascript" src="&lt;c:url value="/static/DataTables-1.10.8/media/js/jquery.js"/&gt;"&gt; &lt;/script&gt;
+
+&lt;!-- DataTables --&gt;
+&lt;script type="text/javascript" src="&lt;c:url value="//static/DataTables-1.10.8/media/js/jquery.dataTables.js"/&gt;"&gt;&lt;/script&gt;
+
+				</code></pre>
+					
+			</section>
+
+			<section>
+				<h2>Initialising DataTables</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+$(document).ready( function () {
+    $('#table_id').DataTable();
+} );
+				</code></pre>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<table id="table_id" class="display">
+    <thead>
+        <tr>
+            <th>Column 1</th>
+            <th>Column 2</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Row 1 Data 1</td>
+            <td>Row 1 Data 2</td>
+        </tr>
+        <tr>
+            <td>Row 2 Data 1</td>
+            <td>Row 2 Data 2</td>
+        </tr>
+    </tbody>
+</table>
+				</code></pre>					
+			</section>
+
+				<section>
+				<h2>Result</h2>
+			<img  style="border:0;"  width="797" height="301" src="img/spring/datatables.png">	
+
+			</section>
+		<section>
+				<h2>Exercise</h2>
+				<ul>
+					<li>Create sample table with Datatable plugin</li>
+				</ul>
+			</section>
+					<section>
+				<h2>Options</h2>
+				<p>Configuration of DataTables is done by passing the options you want defined into the <a>DataTables constructor</a> as an object. For example:</p>
+				<pre  style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+// Disable paging, search and ordering 
+$('#table_id').DataTable( {
+	paging: false,
+	searching: false,
+	ordering:  false
+});
+				</code></pre>
+				<p>Setting defaults</p>
+	<pre  style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+// Disable search and ordering by default
+$.extend( $.fn.dataTable.defaults, {
+    searching: false,
+    ordering:  false
+} );
+ 
+// For this specific table we are going to enable ordering
+// (searching is still disabled)
+$('#example').DataTable( {
+    ordering: true
+} );
+				</code></pre>
+				<p>Full list of options : <a  href="https://datatables.net/reference/option/">https://datatables.net/reference/option/</a></p>
+			</section>
+
+					<section>
+				<h2>DataTables - Data options</h2>
+				<table style="width:100%;">
+				<thead>
+							<tr>
+								<th>Tag</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>					
+							<tr>
+								<td style="font-size: 25px;">data</td>
+								<td style="font-size: 25px;">Data to use as the display data for the table.</td>
+							<tr>
+						<tr>
+								<td style="font-size: 25px;">ajax</td>
+								<td style="font-size: 25px;">Load data for the table's content from an Ajax source</td>
+							<tr>
+						<tr>
+								<td style="font-size: 25px;">ajax.data</td>
+								<td style="font-size: 25px;">Add or modify data submitted to the server upon an Ajax request</td>
+							<tr>
+							<tr>
+								<td style="font-size: 25px;" nowrap>ajax.dataSrc</td>
+								<td style="font-size: 25px;">Data property or manipulation method for table data</td>
+							<tr>
+							
+						</tbody>
+					</table>
+			</section>
+
+					<section>
+				<h2>Data options - data</h2>
+				<p>Data to use as the display data for the table.</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+$('#table_id').DataTable( {
+	"data": [
+		["Tiger Nixon","System Architect"],
+		["Garrett Winters","Director"]
+	]
+} );
+
+$('#table_id2').DataTable( {
+	"data": [
+		{
+			"name":       "Tiger Nixon",
+			"position":   "System Architect",
+			"salary":     "$3,120",
+			"start_date": "2011/04/25",
+			"office":     "Edinburgh",
+			"extn":       "5421"
+		}
+	]
+} );
+				</code></pre>
+					
+			</section>
+
+					<section>
+				<h2>Example</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;h2>Data Table with data(array) &lt;/h2&gt;
+	 &lt;table id="table_id" class="display"&gt;
+     &lt;thead&gt;
+         &lt;tr&gt;
+             &lt;th&gt;Name &lt;/th&gt;
+             &lt;th&gt;Position &lt;/th&gt;
+         &lt;/tr&gt;
+     &lt;/thead&gt;
+     &lt;tbody&gt; &lt;/tbody&gt;
+ &lt;/table&gt;
+
+ &lt;h2&gt;Data Table with data(object) &lt;/h2&gt;
+ &lt;table id="table_id2" class="display"&gt;
+     &lt;thead&gt;
+         &lt;tr&gt;
+             &lt;th&gt;Name &lt;/th&gt;
+             &lt;th&gt;Position &lt;/th&gt;
+             &lt;th&gt;Salary &lt;/th&gt;
+             &lt;th&gt;Start Date &lt;/th&gt;
+             &lt;th&gt;Office &lt;/th&gt;            
+             &lt;th&gt;Extn &lt;/th&gt;
+         &lt;/tr&gt;
+     &lt;/thead&gt;
+     &lt;tbody&gt; &lt;/tbody&gt;
+ &lt;/table&gt;
+				</code></pre>
+				
+			</section>
+<section>
+				<h2>Result</h2>
+			<img  style="border:0;"  width="1009" height="491" src="img/spring/datatable_option_data.png">	
+
+			</section>
+					<section>
+				<h2>Data options - ajax</h2>
+				
+				<ul>
+						<li>Load data for the table's content from an Ajax source</li>
+						<ul>
+						<li>ajax.data</li>
+						<li>ajax.dataSrc</li>
+					</ul>
+					</ul>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+$('#tableData').DataTable( {
+	ajax: {
+		url : '${pageContext.request.contextPath}/sampleajaxcrud/listAllProducts.html/',
+		type : 'POST',
+		data : function ( d ) {
+			d.searchCriteria = $('#searchText').val();
+		},
+		dataSrc : ""
+	}
+});
+				</code></pre>				
+			</section>
+<section>
+				<h2>Result</h2>
+			<img  style="border:0;"  width="1009" height="454" src="img/spring/datatable_option_ajax.png">	
+
+			</section>
+						<section>
+				<h2>Exercise</h2>
+				<ul>
+					<li>Create jsp page and use data from ajax source</li>
+				</ul>
+			</section>
+					<section>
+				<h2>Datatables - columns option</h2>
+				<p>The columns option in the initialisation parameter allows you to define details about the way individual columns behave</p>
+				<ul>
+						<li>Set column specific initialisation properties.</li>
+					</ul>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+$('#example').dataTable( {
+  "columns": [
+    { "searchable": false },
+    { "data": "name", "className":"dt-center" },
+    { "defaultContent": "<i>Not set</i>" },
+    { "data": function(data) {
+				 return 'something';
+	            }},
+    null
+  ]
+} );
+				</code></pre>				
+				<p>Reference : <a  href="https://datatables.net/reference/option/columns">https://datatables.net/reference/option/columns</a></p>
+			</section>
+<section>
+				<h2>Datatables - columnDefs option</h2>
+				<p>Very similar to columns, although in this case the column options defined can be applied to one or more columns. Additionally, not every column need be specified, unlike columns</p>
+				<ul>
+						<li>Set column specific initialisation properties.</li>
+					</ul>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+$('#example').dataTable( {
+	"columnDefs": [ 
+		{ "targets": 0, "searchable": false },
+		{ "targets": [4,5], "orderable": false  } 
+	]
+} );
+				</code></pre>				
+				<p>Reference : <a  href="https://datatables.net/reference/option/columnDefs">https://datatables.net/reference/option/columnDefs</a></p>
+			</section>
+
+				<section>
+				<h2>Datatables - dom option</h2>
+				<p>Datatables can add elements around the table by a single letter, and that letter it used in this dom configuration option to indicate where that element will appear in the document</p>
+				<p>Since: DataTables 1.10</p>
+						<table style="width:100%;">
+				<thead>
+							<tr>
+								<th style="font-size: 24px;">Letter</th>
+								<th style="font-size: 24px;">Description</th>
+							</tr>
+						</thead>
+						<tbody>					
+							<tr>
+								<td style="font-size: 23px;">l</td>
+								<td style="font-size: 23px;"><a>l</a>ength changing input control</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">f</td>
+								<td style="font-size: 23px;"><a>f</a>iltering input</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">t</td>
+								<td style="font-size: 23px;">The <a>t</a>able!</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">i</td>
+								<td style="font-size: 23px;">Table <a>i</a>nformation summary</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">p</td>
+								<td style="font-size: 23px;"><a>p</a>agination control</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">r</td>
+								<td style="font-size: 23px;">p<a>r</a>ocessing display element</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">&lt; &gt;</td>
+								<td style="font-size: 23px;"><a>&lt;div&gt;</a> div element</td>
+							<tr>
+								<tr>
+								<td style="font-size: 23px;">&lt;"className" &gt;</td>
+								<td style="font-size: 23px;"><a>&lt;div class="className"&gt;</a> div with a class</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">&lt;#id &gt;</td>
+								<td style="font-size: 23px;"><a>&lt;div id ="id"&gt;</a> div with an ID</td>
+							<tr>
+
+						</tbody>
+					</table>
+		
+			</section>
+				<section>
+				<h2>Example</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+$('#tableData').DataTable( {
+	ajax: {
+		url : '${pageContext.request.contextPath}/sampleajaxcrud/listAllProducts.html/',
+		type : 'POST',
+		data : function ( d ) {
+			d.searchCriteria = $('#searchText').val();
+		},
+		dataSrc : ""
+	},
+
+	dom : 'lprt<"toolbar">if',
+
+	initComplete : function (){
+			$("div.toolbar").html("<b>Custom tool bar! Text/images etc.</b>").css("float","left");
+		}
+} );
+				</code></pre>
+				
+			</section>
+					<section>
+				<h2>Result</h2>
+			<img  style="border:0;"  width="780" height="348" src="img/spring/datatable_dom.png">	
+
+			</section>
+				<section>
+				<h2>Example</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+$('#tableData').DataTable( {
+	ajax: {
+		url : '${pageContext.request.contextPath}/sampleajaxcrud/listAllProducts.html/',
+		type : 'POST',
+		data : function ( d ) {
+			d.searchCriteria = $('#searchText').val();
+		},
+		dataSrc : ""
+	},
+
+	dom : 'lprt<"toolbar">if',
+
+	initComplete : function (){
+			$("div.toolbar").html("<b>Custom tool bar! Text/images etc.</b>").css("float","left");
+		}
+} );
+				</code></pre>
+				
+			</section>
+		<section>
+				<h2>Result</h2>
+			<img  style="border:0;"  width="780" height="348" src="img/spring/datatable_dom2.png">	
+
+			</section>
+
+			<section>
+					<h2>Questions?</h2>
+				</section>
+			<section>
+				<h2>Datatables API</h2>
+				<p>DataTables has an extensive API which can be used to access the data in a table and manipulate the table after the table initialisation has completed.</p>
+					<ul>
+						<li>The API can be accessed through the following methods:</li>
+					</ul>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+$( selector ).DataTable();
+
+$( selector ).dataTable().api();
+
+new $.fn.dataTable.Api( selector );
+				</code></pre>
+				<p>Api Reference : <a href="https://datatables.net/reference/api/">https://datatables.net/reference/api/</a></p>
+			</section>
+			<section>
+				<h2>Datatables API - Rows</h2>
+				<table style="width:100%;">
+				<thead>
+							<tr>
+								<th style="font-size: 24px;">Name</th>
+								<th style="font-size: 24px;">Description</th>
+							</tr>
+						</thead>
+						<tbody>					
+							<tr>
+								<td style="font-size: 23px;">row()</td>
+								<td style="font-size: 23px;">Select a single row from a table.</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">row().data()</td>
+								<td style="font-size: 23px;">Get / set the data for the selected row.
+								<pre  style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+var table = $('#example').DataTable();
+ 
+$('#example tbody').on( 'click', 'tr', function () {
+
+    console.log( table.row( this ).data() );
+} );
+				</code></pre></td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">row.add()</td>
+								<td style="font-size: 23px;">Add a new row to the table.
+								<pre  style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;"> 
+var rowNode = table.row.add( [ 'Fiona White', 32, 'Edinburgh' ] ).draw().node();
+ 
+$( rowNode ).css( 'color', 'red' ).animate( { color: 'black' } );
+				</code></pre></td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">row().remove()</td>
+								<td style="font-size: 23px;">Delete the selected row from the DataTable.
+								<pre  style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;"> 
+$('#example tbody').on( 'click', 'img.icon-delete', function () {
+
+    table.row( $(this).parents('tr') ).remove().draw();
+} );
+				</code></pre></td>
+							<tr>
+						
+
+						</tbody>
+					</table>
+			</section>
+
+			<section>
+				<h2>Datatables API - Rows(cont.)</h2>
+				<table style="width:100%;">
+				<thead>
+							<tr>
+								<th style="font-size: 24px;">Name</th>
+								<th style="font-size: 24px;">Description</th>
+							</tr>
+						</thead>
+						<tbody>					
+							
+							<tr>
+								<td style="font-size: 23px;">rows()</td>
+								<td style="font-size: 23px;">Select multiple rows from a table.</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">rows().data()</td>
+								<td style="font-size: 23px;">Get the data for the selected rows.
+								<pre  style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;"> 
+var data = table.rows().data();
+ 
+alert( 'The table has '+data.length+' records' );
+				</code></pre></td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">rows.add()</td>
+								<td style="font-size: 23px;">Add multiple new rows to the table.
+								<pre  style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;"> 
+table.rows.add( [new Pupil( 43 ), new Pupil( 67 ), new Pupil( 102 ) ] )
+
+	.draw().nodes().to$().addClass( 'new' );
+
+/** to$() - Convert the API instance to a jQuery object */
+				</code></pre></td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">rows().remove()</td>
+								<td style="font-size: 23px;">Delete the selected rows from the DataTable.
+								<pre  style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;"> 
+var rows = table.rows( '.selected' ).remove().draw();
+				</code></pre>
+				</td>
+							<tr>
+						
+						</tbody>
+					</table>
+			</section>
+
+				<section>
+				<h2>dataTable() vs. DataTable()</h2>
+	<table style="width:100%;">
+			<thead>
+							<tr>
+								<th style="font-size: 24px;">#</th>
+								<th style="font-size: 24px;">dataTable()</th>
+								<th style="font-size: 24px;">DataTable()</th>
+							</tr>
+						</thead>
+						<tbody>			
+						
+							<tr>
+								<td style="font-size: 23px;">constructor</td>
+								<td style="font-size: 23px;">
+<pre style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+var table = $(&lt;selector&gt;).dataTable()
+</code></pre>
+								</td>
+								<td style="font-size: 23px;">
+		<pre style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+var table = $(&lt;selector&gt;).DataTable()
+</code></pre>						
+								</td>
+							<tr>
+						<tr>
+								<td style="font-size: 23px;">API</td>
+								<td style="font-size: 23px;">
+<pre style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+table.fnDeleteRow(0); 
+
+table.fnAddData(['E', 'F']);
+</code></pre>
+								</td>
+								<td style="font-size: 23px;">
+		<pre style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+table.row(0).remove();
+
+table.row.add(['E', 'F']).draw();
+</code></pre>						
+								</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">Supported by version</td>
+								<td style="font-size: 23px;">1.9, 1.10</td>
+								<td style="font-size: 23px;">1.10</td>
+							<tr>
+
+										<tr>
+								<td style="font-size: 23px;">Combining to DataTable()</td>
+								<td style="font-size: 23px;">
+<pre style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+table.api().row(0).remove();
+
+table.api().row.add(['E', 'F']).draw();
+</code></pre>
+								</td>
+								<td style="font-size: 23px;">
+		<pre style="width:100%"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+Do not anything
+</code></pre>						
+								</td>
+							<tr>	
+						</tbody>
+					</table>
+					<p style="font-size: 23px;">If you dont use the new API, there is no reason for using the DataTable constructor. The dataTable constructor is not deprecated.</p>
+			</section>
+		<section>
+					<h2>Questions?</h2>
+		</section>
+				<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Use DataTable API </li>
+						<ul>							
+							<li>add row </li>
+							<li>update row</li>
+							<li>remove row</li>
+						</ul>
+					</ul>
+			</section>
+
+		
+			<section>
+				<h2>Styling</h2>			
+			</section>
+			<section>
+				<h2>Default styling options</h2>
+				<p>DataTables provides a base set of styles to elements by adding <a>class</a> names to your <a>table tag</a></p>
+					<ul>
+						<li>Table classes</li>
+						<li>Cell classes</li>
+					</ul>
+					<p>Default styling  :<a href="https://datatables.net/manual/styling/classes">https://datatables.net/manual/styling/classes</a></p>
+					<p>Theme creator <a href="https://datatables.net/manual/styling/theme-creator">https://datatables.net/manual/styling/theme-creator</a></p>
+			</section>
+				<section>
+				<h2>Table classes</h2>
+				<p>The default DataTables stylesheet has the following class names available to control the different styling features of datatables</p>
+				<table style="width:100%;">
+				<thead>
+							<tr>
+								<th style="font-size: 25px;" nowrap>Class name</th>
+								<th style="font-size: 25px;">Description</th>
+							</tr>
+						</thead>
+						<tbody>					
+							<tr>
+								<td style="font-size: 22px;">display</td>
+								<td style="font-size: 22px;">Short-hand for the stripe, hover, row-border and order-column classes.</td>
+							<tr>
+							<tr>
+								<td style="font-size: 22px;">cell-border</td>
+								<td style="font-size: 22px;">Border around all four sides of each cell</td>
+							<tr>
+							<tr>
+								<td style="font-size: 22px;">compact</td>
+								<td style="font-size: 22px;">Reduce the amount of white-space the default styling for the DataTable uses (since 1.10.1)</td>
+							<tr>
+							<tr>
+								<td style="font-size: 22px;">hover</td>
+								<td style="font-size: 22px;">Row highlighting on mouse over</td>
+							<tr>
+							<tr>
+								<td style="font-size: 22px;">nowrap</td>
+								<td style="font-size: 22px;">Disable wrapping of content in the table (since 1.10.1)</td>
+							<tr>
+							<tr>
+								<td style="font-size: 22px; nowrap">order-column</td>
+								<td style="font-size: 22px;">Highlight the column that the table data is currently ordered on</td>
+							<tr>
+							<tr>
+								<td style="font-size: 22px;">row-border</td>
+								<td style="font-size: 22px;">Border around only the top an bottom of each each (i.e. for the rows).Note cell-border and row-border are mutually exclusive and cannot be used together.</td>
+							<tr>
+							<tr>
+								<td style="font-size: 22px;">stripe</td>
+								<td style="font-size: 22px;">Row striping</td>
+							<tr>
+							
+						</tbody>
+					</table>
+					
+			</section>
+
+	<section>
+				<h2>Cell  classes</h2>
+				<p>DataTable stylesheet also has basic options for the styling of cells. These can be applied to class individually using HTML, or use <a>columns.className</a> to apply them to all cells in a column. </p>
+				<table style="width:100%;">
+				<thead>
+							<tr>
+								<th style="font-size: 25px;" nowrap>Class name</th>
+								<th style="font-size: 25px;">Description</th>
+							</tr>
+						</thead>
+						<tbody>					
+							<tr>
+								<td style="font-size: 22px;">dt[-head|-body]-left	</td>
+								<td style="font-size: 22px;">Left aligned text</td>
+							<tr>
+							<tr>
+								<td style="font-size: 22px;">dt[-head|-body]-center	</td>
+								<td style="font-size: 22px;">Center aligned text</td>
+							<tr>
+							<tr>
+								<td style="font-size: 22px;">dt[-head|-body]-right</td>
+								<td style="font-size: 22px;">Right aligned text</td>
+							<tr>
+							<tr>
+								<td style="font-size: 22px;">dt[-head|-body]-justify</td>
+								<td style="font-size: 22px;">Justify aligned text</td>
+							<tr>
+							<tr>
+								<td style="font-size: 22px;">dt[-head|-body]-nowrap	</td>
+								<td style="font-size: 22px;">nowrap aligned text</td>
+							<tr>
+	
+						</tbody>
+					</table>
+				
+			</section>
+			<section>
+			<h3>Cell classes(Example)</h3>
+					<ul>
+					<li><a>dt-right</a> - Right align text in the header and body.</li>
+					<li><a>dt-head-right</a> - Right align text in the header only</li>
+					<li><a>dt-body-right</a> - Right align text in the body only.</li>
+					</ul>
+					<p>eg.</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+$('#tableData').DataTable( {
+	columns: [
+		{ "data": "productId" ,"className":"dt-center"},
+		{ "data": "productName","className":"dt-head-right" },
+		{ "data": "category.categoryName","className":"dt-body-center" },
+		{ "data": "price","className":"dt-body-right" }
+	]
+} );
+				</code></pre>
+			</section>
+			<section>
+				<h2>Internationalizable</h2>
+				<p>Make DataTables display in different languages.</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+$('#example').dataTable( {
+	"language": {
+		"url": "//cdn.datatables.net/plug-ins/1.10.8/i18n/Thai.json"
+	}
+} );
+				</code></pre>
+				
+		<p>Internalizable site : <a href="https://datatables.net/plug-ins/i18n/">https://datatables.net/plug-ins/i18n/</a><p>
+			</section>
+		<section>
+				<h2>Exercise</h2>
+				<ul>
+					<li>Make web with datatable support internalization</li>
+					<ul>
+						<li>Thai</li>
+						<li>English</li>
+				</ul>
+				</ul>
+			</section>
+			
+			<section>
+				<h2>Spring MVC with Upload File</h2>
+			</section>
+
+			<section>
+				<h2>Spring’s multipart (file upload)</h2>
+				<p>Spring provides <a>MultipartResolver</a> for use with Commons FileUpload and another for use with Servlet 3.0 multipart request parsing.</p>
+			</section>
+
+			<section>
+				<h2>Using a MultipartResolver</h2>
+				<p>Configuration in applicationContext.xml or dispatcher-servlet.xml</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;bean id="multipartResolver"
+      class="org.springframework.web.multipart.commons.CommonsMultipartResolver"&gt;
+
+     &lt;!-- one of the properties available; the maximum file size in bytes --&gt;
+     &lt;property name="maxUploadSize" value="100000"/&gt;
+
+&lt;/bean&gt;
+				</code></pre>
+			
+			</section>
+
+			<section>
+				<h2>File upload in a form</h2>
+				<p>Create a form with a file input to upload.</p>
+				
+				<pre  style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;html lang="en"&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;body&gt;
+	&lt;h1&gt;Sample Upload with Spring MVC &lt;/h1&gt;
+	&lt;h2&gt;Please upload a file &lt;/h2&gt;
+	&lt;form method="post" enctype="multipart/form-data"
+								action="${pageContext.request.contextPath}/sampleupload" &gt;
+		&lt;input type="file" name="file"/&gt;
+		&lt;input type="submit"/&gt;
+	&lt;/form&gt;
+	&lt;div&gt;${ fileName } &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+				</code></pre>
+				
+					<p  style="font-size:16px;">***The encoding attribute ( enctype="multipart/form-data") lets the browser know how to encode the form as multipart request</p>
+			</section>
+			
+			<section>
+				<h2>Example Upload Controller</h2>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+public class SampleUploadController {
+	
+	@RequestMapping( value = "sampleupload", method = RequestMethod.GET)
+	public String uploadPage(){
+		return "upload/sampleUpload";
+	}
+	
+	@RequestMapping( value = "/sampleupload", method = RequestMethod.POST)
+	public String upload(@RequestParam("file") MultipartFile file, Model model){
+		model.addAttribute("fileName", "Not multipart upload!!");
+		if (!file.isEmpty()) {
+			// store the bytes somewhere
+			model.addAttribute("fileName", "Upload file "+file.getOriginalFilename()+ " success!!!");
+		}
+
+		return "upload/sampleUpload";
+	}
+	
+}
+				</code></pre>
+					
+			</section>
+			<section>
+				<h2>Result</h2>
+			<img  style="border:0;"  width="821" height="264" src="img/spring/sampleupload.png">	
+
+			</section>
+		<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Make Web Application to support upload file</li>
+						<li>Save file upload to physical file system </li>
+					</ul>
+
+			</section>
+
+			<section>
+				<h2>Display Image on Spring MVC</h2>
+			</section>
+
+			<section>
+				<h2>How to display image</h2>
+				<ul>
+				<p>Used Html &lt;img/&gt; tag with JSTL &lt;c:url /&gt; </p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;img src="&lt;c:url value='source_image' /&gt;"/&gt;
+				</code></pre>
+				<p>Source file:</p>
+				<ul>
+					<ul>
+						<li>File on root directory of server</li>
+						<li>Physical file system</li>
+					</ul>
+					</ul>
+				</ul>
+			</section>
+				
+				<section>
+				<h3>Display Image from root directory of server</h3>
+				<p>Use &lt;mvc:resources&gt; map static folder to root directory of server</p>
+			<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+	&lt;mvc:resources mapping="/static/**" location="/" /&gt;
+				</code></pre>
+			<p>On Jsp</p>
+			<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+	&lt;img  src="&lt;c:url value="/static/ImageFolder/imageName" /&gt;"/&gt;
+				</code></pre>
+			</section>
+
+				<section>
+				<h3>Display Image from physical file system</h3>
+					<ul>
+						<li>Use &lt;mvc:resources&gt;</li>
+						<li>Create DisplayImageServlet</li>
+						<li>@ResponseBody, HttpEntity</li>
+					</ul>
+			</section>
+
+							<section>
+				<h3>Display Image from physical file system</h3>
+				<p>Use &lt;mvc:resources&gt; map static folder to physical file system</p>
+			<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+	&lt;mvc:resources mapping="/images/**" location="file:///C:/ImageFolder/" /&gt;
+				</code></pre>
+			<p>On Jsp</p>
+			<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+	&lt;img  src="&lt;c:url value="/images/imageName" /&gt;"/&gt;
+				</code></pre>
+			</section>
+
+
+
+			<section>
+				<h2>Display by DisplayImageServlet</h2>
+				<p>Create DisplayImageServlet </p>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+/** DisplayImageServlet*/
+public class DisplayImageServlet extends HttpServlet {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, 
+		IOException {
+			this.displayImage(request, response);
+	}
+
+	public void displayImage(HttpServletRequest request, HttpServletResponse response) throws ServletException, 
+		IOException{
+			File imageFile = new File("ImageFolder"+request.getParameter("fileName"));
+			FileInputStream fin = new FileInputStream(imageFile);
+			ServletOutputStream outStream = response.getOutputStream();
+			response.setContentType("image/png");
+			int i = 0;
+			while (i != -1) {
+				i = fin.read();
+				outStream.write(i);
+			}	fin.close();
+	}	
+}
+				</code></pre>
+			</section>
+
+			<section>
+				<h3>Display by DisplayImageServlet(cont)</h3>
+				<p>web.xml </p>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+/** Mapping Servlet in web.xml*/
+&lt;servlet&gt;
+	 &lt;servlet-name&gt;DisplayImageServlet &lt;/servlet-name&gt;
+	 &lt;servlet-class&gt;com.aug.servlet.DisplayImageServlet &lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+	 &lt;servlet-name&gt;DisplayImageServlet &lt;/servlet-name&gt;
+	 &lt;url-pattern&gt;/DisplayImageServlet &lt;/url-pattern&gt;
+&lt;/servlet-mapping>
+				</code></pre>
+			<p>On Jsp</p>
+			<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+	&lt;img  src="&lt;c:url value="${pageContext.request.contextPath}/DisplayImageServlet?fileName=imageName" /&gt;"/&gt;
+				</code></pre>
+			</section>
+
+			<section>
+				<h3>Display by @ResponseBody, HttpEntity</h3>
+				<p>Controller</p>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@RequestMapping("/imageRequest/{imageName}")	
+public @ResponseBody HttpEntity &lt;byte[]&gt; getPhoto(@PathVariable String imageName) throws IOException {
+	byte[] image = FileUtils.readFileToByteArray(new File("ImageFolder"+ imageName + ".png"));
+
+	HttpHeaders headers = new HttpHeaders();
+	headers.setContentType(MediaType.IMAGE_PNG); 
+	headers.setContentLength(image.length);
+
+	return new HttpEntity &lt;byte[]&gt;(image, headers);
+}	
+				</code></pre>
+			<p>On Jsp</p>
+			<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+	&lt;img  src="&lt;c:url value="${pageContext.request.contextPath}/imageRequest/imageNameWithoutExtension" /&gt;"/&gt;
+				</code></pre>
+			</section>
+<section>
+				<h3>Sample Controller</h3>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+public class DisplayImageController {
+	
+	@RequestMapping( value="/sampledisplayimage.html", method={RequestMethod.GET})
+	public String sampleDisplayImage(){
+		return "displayimg/sampleDisplayImage";
+	}
+	
+	@RequestMapping("/imageRequest/{imageName}")	
+	public @ResponseBody HttpEntity &lt;byte[]&gt; getPhoto(@PathVariable String imageName) throws IOException {
+	    byte[] image = FileUtils.readFileToByteArray(new File("ImageFolder"+ imageName + ".png"));
+
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.IMAGE_PNG); 
+	    headers.setContentLength(image.length);
+
+	    return new HttpEntity &lt;byte[]&gt;(image, headers);
+	}
+}
+				</code></pre>
+			</section>
+	<section>
+				<h3>Sample JSP</h3>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;html lang="en"&gt;
+ &lt;head&gt; &lt;/head&gt;
+ &lt;body&gt;
+ &lt;h1&gt;Sample Display Image on Spring MVC &lt;/h1&gt;
+ &lt;table border="1"&gt;
+ &lt;tr&gt;
+	 &lt;td&gt; &lt;div&gt;Load image from server root directory &lt;br&gt;
+	 &lt;img style="height: 200px;" src=" &lt;c:url value="/static/images/Documentsx.png" /&gt;"/&gt; &lt;/div&gt; &lt;/td&gt;
+	 &lt;td&gt; &lt;div&gt;Load image from physical file system by DisplayImaage &lt;br&gt;
+	 &lt;img style="height: 200px;" src="${pageContext.request.contextPath}/DisplayImageServlet?fileName=Documentsx.png"/&gt; &lt;/div&gt; &lt;/td&gt;
+	 &lt;td&gt; &lt;div&gt;Load image from physical file system by mvc:resources &lt;br&gt;
+	 &lt;img style="height: 200px;" src=" &lt;c:url value="/images/Documentsx.png" /&gt;"/&gt; &lt;/div&gt; &lt;/td&gt;
+	 &lt;td&gt; &lt;div&gt;Load image from physical file system by ResponseBody &lt;br&gt;
+	 &lt;img style="height: 200px;" src="${pageContext.request.contextPath}/imageRequest/Documentsx"/&gt; &lt;/div&gt; &lt;/td&gt;
+ &lt;/tr&gt;	
+ &lt;/table&gt;
+ &lt;/body&gt;
+ &lt;/html&gt;
+				</code></pre>
+			</section>
+				<section>
+				<h2>Result</h2>
+			<img  style="border:0;"  width="836" height="354" src="img/spring/displayImage.png">	
+
+			</section>
+
+		<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Display Image on Jsp</li>
+					</ul>
+
+			</section>
+			
+
+			<section>
+				<h2>Spring MVC Exception Handling</h2>
+					
+			</section>
+
+			<section>
+				<h2>Exception Handling</h2>
+					<ul>
+						<li>Handling by web.xml</li>
+						<li>Handling by Spring MVC Framework</li>
+						<ul>
+							<li>Controller Based</li>
+							<li>Global Exception Handler</li>
+							<li>HandlerExceptionResolver </li>
+						</ul>
+						<!--li>Handling by Interceptor</li-->
+					</ul>
+			</section>
+
+			<section>
+				<h2>Handling by web.xml</h2>
+				<p>When a servlet throws an exception, the web container searches the configurations element for a match with the thrown exception type in web.xml </p>
+	
+			</section>
+
+			<section>
+			<h2>error-page Element</h2>
+			<p>The optional error-page element specifies a mapping between an error code or exception type to the path of a resource in the Web application.</p>
+			<table style="width:100%;">
+				<thead>
+							<tr>
+								<th>Element</th>
+								<th>Req/Opt</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>					
+						<tr>
+								<td style="font-size: 25px;">&lt;error-code&gt;</td>
+								<td style="font-size: 25px;">Optional</td>
+								<td style="font-size: 25px;">A valid HTTP error code, for example, 404.</td>
+							<tr>
+							<tr>
+								<td style="font-size: 25px;" nowrap>&lt;exception-type&gt;</td>
+								<td style="font-size: 25px;">Optional</td>
+								<td style="font-size: 25px;">A fully-qualified class name of a Java exception type, for example, java.lang.ArithmeticException</td>
+							<tr>
+						<tr>
+								<td style="font-size: 25px;">&lt;location&gt;</td>
+								<td style="font-size: 25px;">Required</td>
+								<td style="font-size: 25px;">The location of the resource to display in response to the error. For example, /error.jsp</td>
+							<tr>
+						</tbody>
+					</table>
+			</section>
+				<section>
+				<h2>Declaring in Deployment Descriptor</h2>
+				<p>Declaring an error page for all type of exception</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;error-page&gt;
+	 &lt;exception-type&gt;java.lang.Throwable &lt;/exception-type&gt;
+	 &lt;location&gt;/WEB-INF/views/errors/error.jsp &lt;/location&gt;
+ &lt;/error-page&gt;
+				</code></pre>
+				<p>Declaring an error page for more detailed exception</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;error-page&gt;
+	 &lt;exception-type&gt;java.lang.ArithmeticException &lt;/exception-type&gt;
+	 &lt;location&gt;/WEB-INF/views/errors/error.jsp &lt;/location&gt;
+ &lt;/error-page&gt;
+				</code></pre>
+				<p>Declaring an error page based on HTTP Status code</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;error-page&gt;
+	 &lt;error-code&gt;404 &lt;/error-code&gt;
+	 &lt;location&gt;/WEB-INF/views/errors/error.jsp &lt;/location&gt;
+ &lt;/error-page&gt;
+				</code></pre>
+		
+			</section>
+
+			<section>
+				<h2>Example web.xml</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;web-app&gt;
+	 &lt;display-name&gt;My Web Application &lt;/display-name&gt;
+	 &lt;servlet&gt;
+		 &lt;servlet-name&gt;myweb &lt;/servlet-name&gt;
+		 &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet &lt;/servlet-class&gt;
+		 &lt;load-on-startup&gt;1 &lt;/load-on-startup&gt;
+	 &lt;/servlet&gt;
+	 &lt;servlet-mapping&gt;
+		 &lt;servlet-name&gt;myweb &lt;/servlet-name&gt;
+		 &lt;url-pattern&gt;/ &lt;/url-pattern&gt;
+	 &lt;/servlet-mapping&gt;
+	 &lt;error-page&gt;
+		 &lt;exception-type&gt;java.lang.Throwable &lt;/exception-type&gt;
+		 &lt;location&gt;/WEB-INF/views/errors/error.jsp &lt;/location&gt;
+	 &lt;/error-page&gt;
+	 &lt;error-page&gt;
+		 &lt;error-code&gt;404 &lt;/error-code&gt;
+		 &lt;location&gt;/WEB-INF/views/errors/error.jsp &lt;/location&gt;
+	 &lt;/error-page&gt;
+ &lt;/web-app&gt;
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>Example error.jsp</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%&gt;
+ &lt;%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%&gt;
+ &lt;%@ page isErrorPage="true"%&gt;
+ &lt;!DOCTYPE html&gt;
+ &lt;html lang="en"&gt;
+ &lt;head&gt;
+ &lt;meta charset="utf-8"&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+	 &lt;h1&gt;Web.xml Handler Exception &lt;/h1&gt;
+	 &lt;a href="/myweb"&gt;BACK TO HOME&lt;/a&gt;
+	 &lt;h2&gt;Error Code : ${pageContext.errorData.statusCode} &lt;/h2&gt;
+	 &lt;h3&gt;URL : ${pageContext.exception} &lt;/h3&gt;
+	 &lt;h4&gt;${pageContext.errorData.requestURI} &lt;/h4&gt;
+	 &lt;c:forEach var="trace" items="${pageContext.exception.stackTrace}"&gt;
+		 &lt;p&gt;${trace} &lt;/p&gt;
+	 &lt;/c:forEach&gt;
+ &lt;/body&gt;
+ &lt;/html&gt;
+				</code></pre>				
+			</section>
+
+			<section>
+				<h2>Result</h2>
+			<img  style="border:0;"  width="811" height="397" src="img/spring/webexception.png">	
+
+			</section>
+
+			<section>
+				<h2>Handling by Spring MVC</h2>
+				<p style="font-size:27px;">SpringMVC provides following ways to help us achieving exception handling</p>
+		
+				<ul>
+					<li style="font-size:26px;">Controller Based</li>
+					<li style="font-size:26px;">Global Exception Handler</li>
+					<li style="font-size:26px;">HandlerExceptionResolver implementation </li>
+				</ul>
+
+			</section>
+				<section>
+				<h2>Controller Based</h2>
+				<p>Define exception handler methods in controller classes, when all the exceptions thrown by request, handler method will have handled.</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+/** Controller Based */
+public class SampleExceptionController {
+	private static final Logger logger = LoggerFactory.getLogger(SampleExceptionController.class);
+
+	@RequestMapping( value = "sampleexception", method = RequestMethod.GET)
+	public String pageException() throws Exception{
+		throw new IOException();
+	}
+	/** Any Exception extends java.lang.Throwable.class */
+	@ExceptionHandler({ java.lang.Throwable.class ,Exception.class})
+	public ModelAndView handleException(HttpServletRequest request, Exception ex) {
+		logger.error("Requested URL : "+request.getRequestURL());
+		logger.error("Exception : "+ex);
+
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("errors/mvcerror");
+
+		return modelAndView;
+	}
+}
+				</code></pre>
+			</section>
+
+				<section>
+			<h2>Standard Spring MVC Exceptions</h2>
+			<table style="width:100%;">
+				<thead>
+							<tr>
+								<th>Exception</th>
+								<th>HTTP Status Code</th>
+							</tr>
+						</thead>
+						<tbody>					
+						<tr>
+								<td style="font-size: 23px;">BindException</td>
+								<td style="font-size: 23px;">400 (Bad Request)</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">ConversionNotSupportedException</td>
+								<td style="font-size: 23px;">500 (Internal Server Error)</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">HttpMediaTypeNotAcceptableException</td>
+								<td style="font-size: 23px;">406 (Not Acceptable)</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">HttpMediaTypeNotSupportedException</td>
+								<td style="font-size: 23px;">415 (Unsupported Media Type)</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">HttpMessageNotReadableException</td>
+								<td style="font-size: 23px;">400 (Bad Request)</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">HttpMessageNotWritableException</td>
+								<td style="font-size: 23px;">500 (Internal Server Error)</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">HttpRequestMethodNotSupportedException</td>
+								<td style="font-size: 23px;">405 (Method Not Allowed)</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">MethodArgumentNotValidException</td>
+								<td style="font-size: 23px;">400 (Bad Request)</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">MissingServletRequestParameterException</td>
+								<td style="font-size: 23px;">400 (Bad Request)</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">MissingServletRequestPartException</td>
+								<td style="font-size: 23px;">400 (Bad Request)</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">NoHandlerFoundException</td>
+								<td style="font-size: 23px;">404 (Not Found)</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">NoSuchRequestHandlingMethodException</td>
+								<td style="font-size: 23px;">404 (Not Found)</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">TypeMismatchException</td>
+								<td style="font-size: 23px;">400 (Bad Request)</td>
+							<tr>
+						
+						</tbody>
+					</table>
+			</section>
+
+			<section>
+				<h2>Result</h2>
+			<img  style="border:0;"  width="811" height="397" src="img/spring/mvcexception.png">	
+
+			</section>
+				
+				<section>
+				<h2>Global Exception Handler</h2>
+				<p>Exception handler methods can use with any class and used when controller class is not able to handle the exception</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@ControllerAdvice
+public class GlobalExceptionController {
+	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionController.class);
+
+	@ExceptionHandler({ java.lang.Throwable.class, Exception.class })
+	public ModelAndView handleException(HttpServletRequest request, Exception ex) {
+		logger.error("Requested URL : " + request.getRequestURL());
+		logger.error("Exception : " + ex);
+
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("errors/mvcerror");
+		return modelAndView;
+}
+	@ResponseStatus(value=HttpStatus.NOT_FOUND, reason="IOException occured")
+	@ExceptionHandler(IOException.class)
+	public String handleIOException(){
+		logger.error("IOException handler executed");
+		return "errors/mvcerror";
+	}
+}
+				</code></pre>
+			</section>
+			<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Handling Exception from web application</li>
+						<li>Create difference errors page for each code</li>
+					</ul>
+			</section>
+				<section>
+				<h2>HandlerExceptionResolver</h2>
+				<p>Spring Framework provides HandlerExceptionResolver interface that we can implement to create global exception handler</p>
+				<ul>
+				
+				<li>In a Spring MVC application, you can register one or more exception resolver to resolve uncaught exceptions.</li>
+				<!--li>Spring MVC comes with such a simple exception resolver i.e. SimpleMappingExceptionResolver to map each category of exceptions to a view in a configurable way.</li-->
+				</ul>
+			</section>
+				<section>
+				<h2>SimpleMappingExceptionResolver</h2>
+				<p>SimpleMappingExceptionResolver is the default implementation class, it allows us to configure exceptionMappings where we can specify which resource to use for a particular exception.</p>
+				<ul>
+						<p><a>We are just extending SimpleMappingExceptionResolver and overriding one of the method. But that is same as using ControllerAdvice implementation</a></p>
+					</ul>
+		</section>
+
+				<section>
+				<h2>Configuration</h2>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	<property name="exceptionMappings">
+		<props>
+			<prop key="com.grandek.exception.MyException">errors/myExceptionView</prop>
+			<prop key="java.io.IOException">errors/ioerror</prop>
+			<prop key="java.lang.Throwable">errors/simpleerror</prop>
+		</props>
+	</property>
+	<property name="defaultErrorView" value="errors/errorView"></property>
+</bean>
+				</code></pre>
+			</section>
+
+				<section>
+				<h2>MyException</h2>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+package com.grandek.exception; 
+import java.util.Date;
+ 
+public class MyException extends RuntimeException {
+
+    private Date date;
+    private String message;
+     
+    public MyException(Date date, String message) {
+        super();
+        this.date = date;
+        this.message = message;
+    } 
+    public Date getDate() {return date;} 
+    public String getMessage() {return message;} 
+    @Override
+    public String toString() {
+        return "MyException [date=" + date + ", message=" + message + "]";
+    }
+}
+				</code></pre>
+				
+			</section>
+			<section>
+				<h2>Result</h2>
+			<img  style="border:0;"  width="811" height="397" src="img/spring/mvcexception.png">	
+
+			</section>
+
+			<section>
+					<h2>Questions?</h2>
+				</section>
+		
+			<section>
+				<h2>Interceptor</h2>
+			</section>
+
+				<section>
+				<h2>Spring MVC Interceptor</h2>
+				<ul>
+				<p>Spring MVC provides a powerful mechanism to intercept an http request. Similar to Servlet Filter concept, Spring MVC provides a way to define special classes called Interceptors that gets called before and after a request is served.</p>
+				</ul>
+			</section>
+			<section>
+				<h2>HandlerInterceptor </h2>
+				<p>Each interceptor must implement <a>HandlerInterceptor</a> interface</p>
+				<p>There are three methods that need to be implemented.</p>
+					<table  style="width:90%;">
+						<thead>
+							<tr>
+								<th>Mothod</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+							<tr>
+								<td style="font-size: 23px;">preHandle(..)</td>
+								<td style="font-size: 23px;">Called before the handler execution, returns a boolean value, “true” : continue the handler execution chain; “false”, stop the execution chain and return it.</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">postHandle(..)</td>
+								<td style="font-size: 23px;">Called after the handler execution, allow manipulate the ModelAndView object before render it to view page.</td>
+							<tr>
+							<tr>
+								<td style="font-size: 23px;">afterCompletion(..)</td>
+								<td style="font-size: 23px;">Called after the complete request has finished. Seldom use, cant find any use case.</td>
+							<tr>
+							
+						</tbody>
+					</table>
+			</section>
+
+
+	<section>
+				<h2>Interceptor Example</h2>
+				<p>MaintenanceInterceptor</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public class MaintenanceInterceptor extends HandlerInterceptorAdapter{
+	
+	private int maintenanceStartTime;
+	private int maintenanceEndTime;
+	private String maintenanceMapping;
+	 // the usual getters and setters...
+
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		
+		int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+		
+		if (hour >= maintenanceStartTime && hour < maintenanceEndTime) {
+			//maintenance time, send to maintenance page
+			response.sendRedirect(maintenanceMapping);
+			return false;
+		} else {
+			return true;
+		}		
+	}	
+}
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>Interceptor Example(cont.)</h2>
+				<p>ExecuteTimeInterceptor </p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public class ExecuteTimeInterceptor extends HandlerInterceptorAdapter {
+
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+		long startTime = System.currentTimeMillis();
+		request.setAttribute("startTime", startTime);
+
+		return true;
+	}
+
+	@Override
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+
+		long startTime = (Long) request.getAttribute("startTime");
+
+		long endTime = System.currentTimeMillis();
+
+		long executeTime = endTime - startTime;
+
+		System.out.println("[" + handler + "] executeTime : " + executeTime + "ms");
+	}
+	
+}
+				</code></pre>
+			</section>
+
+
+	<section>
+				<h2>Configuration</h2>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd"&gt;
+	 &lt;mvc:interceptors&gt;
+		&lt;mvc:interceptor&gt;
+			&lt;mvc:mapping path="/**"/&gt;
+			&lt;mvc:exclude-mapping path="/maintenance"/&gt;
+			 &lt;bean class="com.grandek.myweb.interceptor.MaintenanceInterceptor"&gt;
+				 &lt;property name="maintenanceStartTime" value="10" /&gt;
+				 &lt;property name="maintenanceEndTime" value="14" /&gt;
+				 &lt;property name="maintenanceMapping" value="/myweb/maintenance" /&gt;
+			 &lt;/bean&gt;
+		&lt;/mvc:interceptor&gt;
+		&lt;bean class="com.grandek.myweb.interceptor.ExecuteTimeInterceptor"&gt;
+		&lt;/bean&gt;
+	 &lt;/mvc:interceptors&gt;
+ &lt;/beans&gt;
+				</code></pre>
+				
+			</section>
+			<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Create LoggingInterceptor for Web Application </li>
+					</ul>
+			</section>
+
+				<section>
+				<h2>Hibernate interceptor</h2>
+				<p>Hibernate has a powerful feature called <a>interceptor</a></p>
+					<p>The Interceptor in Hibernate provides callback from the session to the application, allowing the application to inspect and/or manipulate the properties of a persistent object just before it is saved,update,delete,load from the database</p>
+			</section>
+
+			<section>
+				<h2>Hiternate Interceptor in Action</h2>
+				<p>Two ways to implement interceptor in Hibernate, by extending <a>EmptyInterceptor</a> or by implementing <a>Interceptor</a> interface.</p>
+				<ul><li>These are the most basic methods that an Interceptor</li></ul>
+				<table  style="width:90%;">
+						<thead>
+							<tr>
+								<th style="font-size: 23px;">Mothod</th>
+								<th style="font-size: 23px;">Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+							<tr>
+								<td style="font-size: 22px;">onSave</td>
+								<td style="font-size: 22px;">Called when you save an object. The object is not persisted yet.</td>
+							<tr>
+							
+							<tr>
+								<td style="font-size: 22px;">onFlushDirty</td>
+								<td style="font-size: 22px;">Called when you update an object. The object is not persisted yet.</td>
+							<tr>
+							
+							<tr>
+								<td style="font-size: 22px;">onDelete</td>
+								<td style="font-size: 22px;">Called when you delete an object. The object is not deleted from the database yet.</td>
+							<tr>
+							
+							<tr>
+								<td style="font-size: 22px;">preFlush</td>
+								<td style="font-size: 22px;">Called before committing to the database.</td>
+							<tr>
+							
+							<tr>
+								<td style="font-size: 22px;">postFlush</td>
+								<td style="font-size: 22px;">Called after committing to the database.</td>
+							<tr>
+						</tbody>
+					</table>
+			</section>
+
+			<section>
+				<h2>Person</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public class Person extends BaseModel implements Serializable {
+
+	private Integer id;
+	private String name;
+	private Integer age;
+	private String auditFlag;
+	private Date createdDate;
+	private String createdBy;
+	private Date updatedDate;
+	private String updatedBy;
+
+	// the usual getters and setters...
+}
+				</code></pre>
+					
+			</section>
+
+			<section>
+				<h2>AuditInterceptor</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ public class AuditInterceptor extends EmptyInterceptor {
+
+	@Override
+	public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
+		for (int i = 0; i < propertyNames.length; i++) {
+			if ("createdDate".equals(propertyNames[i])) { state[i] = new Date(); }
+			if ("createdBy".equals(propertyNames[i])) { state[i] = "Grand_C"; }
+			if ("auditFlag".equals(propertyNames[i])) { state[i] = "C"; }
+		}
+		return true;
+	}
+		
+	@Override
+	public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
+		for (int i = 0; i < propertyNames.length; i++) {
+			if ("updatedDate".equals(propertyNames[i])) { currentState[i] = new Date(); }
+			if ("updatedBy".equals(propertyNames[i])) { currentState[i] = "Grand_U"; }
+			if ("auditFlag".equals(propertyNames[i])) { currentState[i] = "U"; }
+		}
+		return true;
+	}	
+}
+				</code></pre>
+					
+			</section>
+
+			<section>
+				<h2>Configuration Interceptor</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;bean id="sessionFactory"  class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" 
+	p:packagesToScan="com.grandek.mydb.model"&gt;
+	 &lt;property name="dataSource" ref="dataSource"&gt; &lt;/property&gt;
+	 &lt;property name="hibernateProperties"&gt;
+		 &lt;props&gt;
+			 &lt;prop key="hibernate.dialect"&gt;${jdbc.mysql.dialect} &lt;/prop&gt;
+			 &lt;prop key="hibernate.show_sql"&gt;true &lt;/prop&gt;
+			 &lt;prop key="hibernate.cache.use_second_level_cache"&gt;false &lt;/prop&gt;
+			 &lt;prop key="hibernate.cache.use_query_cache"&gt;false &lt;/prop&gt;
+		 &lt;/props&gt;
+	 &lt;/property&gt;
+	 &lt;property name="entityInterceptor"&gt;
+		 &lt;bean class="com.grandek.myweb.interceptor.AuditInterceptor"&gt; &lt;/bean&gt;
+	 &lt;/property&gt;
+ &lt;/bean&gt;
+				</code></pre>
+
+			</section>
+
+			<section>
+					<h2>Questions?</h2>
+				</section>
+
+			<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Create Loging entity</li>
+						<ul>
+							<li>Self design attributes</li>
+						</ul>
+						<li>Modify Interceptor to save all activity in to log</li>
+					</ul>
+
+			</section>
+			
+
+				<section>
+				<h2>Spring MVC with JasperReport</h2>
+					
+			</section>
+
+			<section>
+				<h2>Add Report dependency</h2>
+	<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-context-support</artifactId>
+	<version>4.1.1.RELEASE</version>
+</dependency>
+	<dependency>
+	<groupId>net.sf.jasperreports</groupId>
+	<artifactId>jasperreports</artifactId>
+	<version>5.5.0</version>
+</dependency>
+<dependency>
+	<groupId>xml-apis</groupId>
+	<artifactId>xml-apis</artifactId>
+	<version>1.4.01</version>
+</dependency>
+<dependency>
+	<groupId>org.codehaus.groovy</groupId>
+	<artifactId>groovy-all</artifactId>
+	<version>2.0.1</version>
+</dependency> 
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi</artifactId>
+	<version>3.7</version>
+</dependency>
+<dependency>
+	<groupId>com.lowagie</groupId>
+	<artifactId>itext</artifactId>
+	<version>2.1.7</version>
+</dependency>
+				</code></pre>
+			</section>
+	<section>
+					<h2>Create Report.jasper</h2>
+					<p><img  width="414" height="303"  border=0 style ="background-color :#fff" src="img/spring/springjasper.png"></p>
+					
+			</section>
+	<section>
+					<h2>Jasper report folder and font</h2>
+						<table>
+				<tr>
+				<td><img style="border:none; background:none;box-shadow:none;" width="312" height="219" src="img/spring/jasperfolder.png"></td>
+				<td  style="vertical-align: top;">
+					<ul style="padding-top:5px;">
+						<li>src/main/resources</li>
+						<ul>
+							<li>jasperreports_extension.properties</li>
+						</ul>
+						<li>src/main/resources/fonts</li>
+						<ul>
+							<li>font.ttf</li>
+							<li>font.xml</li>
+						</ul>
+						<li>src/main/resources/reports</li>
+						<ul>
+							<li>report.jasper</li>
+						</ul>						
+						
+					</ul>
+					</td>
+					</tr>
+					</table>
+					
+			</section>
+
+			<section>
+				<h2>Configuration File</h2>
+				<p>jasperreports_extension.properties</p>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+net.sf.jasperreports.extension.registry.factory.simple.font.families
+	=net.sf.jasperreports.engine.fonts.SimpleFontExtensionsRegistryFactory
+net.sf.jasperreports.extension.simple.font.families.angsana=fonts/fonts.xml
+				
+				</code></pre>
+				<p>font.xml</p>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+ &lt;fontFamilies&gt;
+	 &lt;fontFamily name="Angsana CRS"&gt;
+		 &lt;normal&gt;fonts/ANGSA.TTF &lt;/normal&gt;
+		 &lt;italic&gt;fonts/ANGSA.TTF &lt;/italic&gt;
+		 &lt;pdfEncoding&gt;Identity-H &lt;/pdfEncoding&gt;
+		 &lt;pdfEmbedded&gt;true &lt;/pdfEmbedded&gt;
+		 &lt;exportFonts&gt;
+			 &lt;export key="net.sf.jasperreports.html"&gt;Angsana CRS, 'Angsana new', AngsanaUPC &lt;/export&gt;
+			 &lt;export key="net.sf.jasperreports.xhtml"&gt;Angsana CRS, 'Angsana new', AngsanaUPC &lt;/export&gt;
+		 &lt;/exportFonts&gt;
+	 &lt;/fontFamily&gt;
+ &lt;/fontFamilies&gt;
+				</code></pre>
+				
+			</section>
+			
+			<section>
+				<h2>Report Controller</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+public class SampleReportController {
+	@Autowired ProductService productService;
+	@Autowired private MessageSource message;
+	@Autowired private ApplicationContext appContext;
+
+	@RequestMapping(value = "/sampleReport/{reportType}", method = { RequestMethod.GET })
+	public ModelAndView sampleReport(@PathVariable String reportType, Locale locale) {
+		
+		Map &lt;String, Object&gt; parameterMap = new HashMap &lt;String, Object&gt;();
+		
+		/**Create Product collection and convert to JasperReport data*/
+		List &lt;Product&gt; products = productService.findAll();		
+		JRDataSource JRdataSource = new JRBeanCollectionDataSource(products);
+		parameterMap.put("datasource", JRdataSource);
+		
+		/**Get Resource with locale*/
+		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);		
+		parameterMap.put(JRParameter.REPORT_RESOURCE_BUNDLE, bundle);
+		
+		/**Set Type of report*/
+		parameterMap.put("format", reportType);
+
+		/**Create JasperReport View	*/
+		JasperReportsMultiFormatView view = new JasperReportsMultiFormatView();		
+		view.setUrl("classpath:reports/sampleReport.jasper");
+		view.setApplicationContext(appContext);
+
+		return new ModelAndView(view, parameterMap);
+	}
+}
+				</code></pre>
+				
+			</section>
+					<section>
+				<h2>Result</h2>
+			<img  style="border:0;"  width="783" height="397" src="img/spring/report.png">	
+
+			</section>
+				</section>
+					<section>
+				<h2>Result(Thai)</h2>
+			<img  style="border:0;"  width="783" height="397" src="img/spring/report_th.png">	
+
+			</section>
+
+						<section>
+				<h2>Report Controller 2</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Controller
+public class SampleReportController {
+	@Autowired private MessageSource message;
+	@Autowired private ApplicationContext appContext;
+	@Autowired private DataSource dataSource;
+
+	@RequestMapping(value = "/sampleReport/{reportType}", method = { RequestMethod.GET })
+	public ModelAndView sampleReport(@PathVariable String reportType, Locale locale) {
+		
+		Map &lt;String, Object&gt; parameterMap = new HashMap &lt;String, Object&gt;();
+		
+		/**Get Resource with locale*/
+		ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);		
+		parameterMap.put(JRParameter.REPORT_RESOURCE_BUNDLE, bundle);
+		
+		/**Set Type of report*/
+		parameterMap.put("format", reportType);
+
+		/**Create JasperReport View	*/
+		JasperReportsMultiFormatView view = new JasperReportsMultiFormatView();		
+		view.setJdbcDataSource(dataSource);
+		view.setUrl("classpath:reports/subReport.jasper");
+		view.setApplicationContext(appContext);
+
+		return new ModelAndView(view, parameterMap);
+	}
+}
+				</code></pre>
+				
+			</section>
+
+			</section>
+					<section>
+				<h2>Result</h2>
+			<img  width="790" height="410"  border=0 style ="background-color :#fff" src="img/jasper/orderReport.png">
+
+			</section>
+
+			<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Make Web Application to support Report</li>
+						<li>Display Report in Thai and English</li>
+						<li>Create Report with Sub report</li>
+					</ul>
+
+			</section>
+
+				<section>
+					<h2>Questions?</h2>
+				</section>
+				<section>
+					<h1>The End</h1>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+		<script src="js/jquery-1.11.0.min.js"></script>
+		<script>
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+		</script>
+		<script type="text/javascript">
+            var header = $('#header').html();
+            if ( window.location.search.match( /print-pdf/gi ) ) {
+                  $('.slides > section').prepend(header);
+				 $('.slides > section > section').prepend(header);
+				  $('.slides > section > section > section').prepend(header);
+            }
+            else {
+                $('.slides').prepend(header);
+            }
+        </script>
+	</body>
+</html>

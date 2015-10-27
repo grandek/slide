@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Jasper and iReport - The HTML Presentation Framework</title>
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+	<style type="text/css">
+            #header-left {
+                position: absolute;
+                top: 0%;
+                left: 0%;
+            }
+            #header-right {
+                position: absolute;
+                top: 0%;
+                right: 0%;
+            }
+            #footer-left {
+                position: absolute;
+                bottom: 0%;
+                left: 0%;
+            }
+			 #footer-right {
+                position: absolute;
+                bottom: 0%;
+                 right: 0%;
+            }
+			
+			 #footer-center {
+               position: absolute;
+			  margin: auto;
+			  right: 0;
+			  bottom: 0;
+			  left: 0;
+			  height: 0px;
+			  background-color: #f3f2ef;
+			  border-radius: 3px;
+            }
+        </style>
+
+        <div id="hidden" style="display:none;">
+            <div id="header">
+                <div id="header-left"></div>
+                <div id="header-right"></div>
+				<div id="footer-left"><p  style="font-size:12px"></p></div>
+                <div id="footer-center"><p  style="font-size:12px; color:gray;">Jasper Reports and iReport by Ekkachai Kaewprasert</p></div>
+            </div>
+        </div>
+		<div class="reveal">
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+			<section>
+				<h1>Jasper Reports and iReport</h1>
+			</section>
+			<section>
+				<h2>What is Jasper Reports?</h2>
+				<ul>
+					<li>An open source java reporting engine</li>
+					<li>JasperReports is a Java class library.</li>
+					<li>Designed to aid developers with the task of adding reporting capabilities to Java Application.</li>
+					
+				</ul>
+			</section>
+			<section>
+				<h2>Features?</h2>
+				<ul>
+					<li>It has flexible report layout.</li>
+					<li>It is capable of presenting data textually or graphically. </li>
+					<li>Support multiple data sources</li>
+						<ul>
+							<li>Database connection</li>
+							<li>Embedded SQL statement </li>
+							<li>Java Collections (Collection, Array and Map)</li>
+							<li>JDBC result set</li>
+						</ul>
+						<li>Support multiple report formats</li>
+							<ul><li>PDF, XLS, CSV, HTML, XML, RTF, ODT, TXT</li></ul>
+				</ul>
+			</section>
+			<section>
+				<h2>Life Cycle</h2>
+				<ul>
+					<li>Design Phase (Create JRXML file)</li>
+					<li>Compile (compile JRXML to jasper template)</li>
+					<li>Execution Phase (Fill the Jasper template with data to generate Jasper print file(.jrprint))</li>
+					<li>Export Phase (Export the report to any desired format)</li>
+				</ul>
+			</section>
+
+			  <section>
+                    <h2>JRXML Example</h2>
+					<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+				<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
+name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20"
+rightMargin="20" topMargin="20" bottomMargin="20" uuid="5c9f1e83-a8b5-40b9-a53c-44ae89d275d0">
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
+
+					</code></pre>
+                </section>
+		<section>
+			<section>
+				<h2>Report Section</h2>
+				<p><img width="576" height="360" src="img/jasper/section_band.jpg"></p>
+			</section>
+			<section>
+				<h2>Report Section(Cont.)</h2>
+					<ul>
+						<li><a>Title</a>	- This section appears only once at the beginning of the report.</li>
+						<li><a>Page Header</a> -This section appears at the beginning of each page in the generated document.</li>
+						<li><a>Column Header</a> -This section appears at the beginning of each column in the generated document. If the report has only one column defined, then column header and footer sections are ignored.</li>
+						
+					</ul>
+			</section>
+
+			<section>
+				<h2>Report Section(Cont.)</h2>
+					<ul>
+						<li><a>Detail</a> -	This section is repeated for each line of data supplied by the report's data source. The detail section can be made of multiple bands.</li>
+						<li><a>Column Footer</a>	- This section appears at the bottom of each column. If the report's column count is 1, then column header and footer sections are ignored.</li>
+						<li><a>Page Footer</a> -This section appears at the bottom of each page.</li>
+						<li><a>Summary</a> -This section appears only once at the end of the report.</li>
+						
+					</ul>
+			</section>
+		</section>
+		<section>
+			<section>
+				<h2>Elements in JRXML</h2>
+				<ul>
+					<li><a>&lt;staticText&gt;</a> Defines static text that does not depend on any datasources, variables, parameters, or report expressions.</li>
+					<li><a>&lt;textField&gt;</a> Used to display dynamic textual data in reports.</li>
+					<li><a>&lt;textFieldExpression&gt;</a>Defines the data that is displayed in text fields.</li>
+					<li><a>&lt;field&gt;</a>This element is used to map data from datasources or queries into report templates. Fields can be combined in report expressions to obtain the necessary output.</li>
+					
+				</ul>
+			</section>
+			<section>
+				<h2>Elements in JRXML(cont.)</h2>
+				<ul>
+					
+					<li><a>&lt;variable&gt;</a>Report expressions, used several times in a report, can be assigned to variables to simplify the template.</li>
+					<li><a>&lt;parameter&gt;</a>This element is used to define report parameters. Parameter values are supplied via a java.util.Map by calling the appropriate methods in the JasperReports API.</li>
+					<li><a>&lt;group&gt;</a>This element is used to group consecutive records in a datasource sharing some common characteristics.</li>
+					<li>etc.</li>
+				</ul>
+			</section>
+		</section>
+			<section>
+				<h2>Jasper Report in action</h2>
+				<ul>
+					<p>JasperReports</p>
+						<ul>
+							<li>JasperReports uses a template file (JRXML) that defines the report layout</li>
+						</ul>
+						<a>
+						<p>iReport </p>
+						<ul>
+							<li>iReport is a visual designer for JasperReports</li>
+							<li>It creates and edits JRXML files, and allows you to run reports on your desktop. </li>
+						</ul>
+					</a>
+				</ul>
+			</section>
+			<section>
+				<h2>What is iReport?</h2>
+				<ul>
+					<li>Program that helps developers that use the JasperReports library to visually design reports, very simple to use GUI.</li>
+					<li>Provide all importatnt functions to create nice reports in a little time.</li>
+					<li>Help people that don't know the JasperReports library create complex reports and learn the XML syntax. </li>
+					<li>iReport is written in Java.</li>
+				</ul>
+			</section>
+			<section>
+				<h2>The Main Features of iReport</h2>
+				<ul>
+					<li>98% of JasperReports tags supported </li>
+					<li>Visual designer </li>
+					<li>Built-in editor with syntax highlighting for write expression</li>
+					<li>Support for Unicode,</li>
+					<li>Support of all JDBC compliant databases</li>
+					<li>Wizard to create automatically reports </li>
+					<li>Support for sub reports </li>
+					<li>Facilities for fonts</li>
+					<li>etc.</li>
+				</ul>
+			</section>
+
+			<section>
+					<h2>Report Life Cycle</h2>
+					<p><img  width="750" height="345"  border=0 style ="background-color :#fff" src="img/jasper/compilation_process.png"></p>
+					
+			</section>
+				<section>
+				<section>
+						<h2>User Interface</h2>
+						<p><img  width="789" height="458"  border=0 style ="background-color :#fff" src="img/jasper/iReport_main_ui.png"></p>
+				</section>
+				<section>
+						
+						<ul>
+							<li><a>Report Designer</a> is where you visually design the report by dragging, positioning, aligning and resizing report elements.</li>
+							<li><a>Report Inspector</a></li>
+							<ul>
+								<li>shows the report which is composed of many objects (such as fields, parameters and variables)</li>
+								<li>bands (which are sections of the document)</li>
+								<li>elements (such as textfields, images or charts)</li>
+							</ul>
+							<li><a>Elements Palette</a> contains the elements that can be dragged inside a band to display your data.</li>
+							<li><a>Property Sheet</a> is used to set the properties of the currently selected component in the report.</li>
+						</ul>
+				</section>				
+			</section>
+			<section>
+					<h2>Report Designer</h2>
+						<p><img  width="472" height="142"  border=0 style ="background-color :#fff" src="img/jasper/datasource_and_preview_buttons.png"></p>
+						<ul>
+							<li><a>Data source selector</a>, which shows the active connection that will be used to execute the report </li>
+							<li><a>Designer toolbar</a> has three buttons to easily switch from design to preview mode.</li>
+							
+						</ul>
+				</section>
+
+			<section>
+				<h2>Download and install?</h2>
+				<p>
+						Go to link. <a  href="http://sourceforge.net/projects/ireport/files/iReport/iReport-5.6.0/">http://sourceforge.net/projects/ireport/files/iReport/iReport-5.6.0/</a> Click on Download.
+					</p>
+
+				<ul>
+					<li>Window  download .zip or window-installer.exe</li>
+					<ul><li>Programs menu > JasperSoft > iReport </li></ul>
+					<li>Mac or a Linux box, consider to download iReport-.tar.gz</li>
+					<ul><li>run: iReport.sh. from a shell.</li></ul>
+					
+				</ul>
+			</section>
+				
+			<section>
+					<h2>First Report</h2>
+					<ul>
+						<li>Setup Connection</li>
+						<li>Create report with Blank Template</li>
+						<li>Launch Report Wizard</li>
+					</ul>
+			</section>
+
+			<section>
+					<h2>Exersise</h2>
+					<p>Create product report</p>
+					<p><img  width="504" height="335"  border=0 style ="background-color :#fff" src="img/jasper/firstReport.jpg"></p>
+			</section>
+
+			<section>
+					<h2>Parameter & Variable in Report?</h2>
+			</section>
+
+			<section>
+					<h2>Exersise</h2>
+					<p>Create product report with parameter and variable</p>
+					<p><img  width="790" height="410"  border=0 style ="background-color :#fff" src="img/jasper/paramandvariable.png"></p>
+			</section>
+
+			<section>
+					<h2>Group by Report?</h2>
+			</section>
+
+			<section>
+					<h2>Exersise</h2>
+					<p>Create product report group by category</p>
+					<p><img  width="790" height="410"  border=0 style ="background-color :#fff" src="img/jasper/groupby.png"></p>
+			</section>
+
+			<section>
+					<h2>Exersise 2</h2>
+					<p>Create Order report group by order and category</p>
+					<p><img  width="790" height="410"  border=0 style ="background-color :#fff" src="img/jasper/groupreport2.png"></p>
+			</section>
+
+			<section>
+					<h2>Subreport?</h2>
+			</section>
+
+			<section>
+					<h2>Exersise</h2>
+					<p>Create order report</p>
+					<p><img  width="790" height="410"  border=0 style ="background-color :#fff" src="img/jasper/orderReport.png"></p>
+			</section>
+
+			<section>
+					<h2>Crosstab Report?</h2>
+			</section>
+
+			<section>
+					<h2>Exersise</h2>
+					<p>Create summary product by employee</p>
+					<p><img  width="790" height="271"  border=0 style ="background-color :#fff" src="img/jasper/crosstab.png"></p>
+			</section>
+			<section>
+					<h2>Exersise 2</h2>
+					<p>Create Order report group by employee</p>
+					<p><img  width="790" height="271"  border=0 style ="background-color :#fff" src="img/jasper/crosstab2.png"></p>
+			</section>
+			<section>
+					<h2>Exersise 3</h2>
+					<p>Create Order report group by order and category</p>
+					<p><img  width="790" height="509"  border=0 style ="background-color :#fff" src="img/jasper/crosstab3.png"></p>
+			</section>
+
+			<section>
+					<h2>Chart?</h2>
+			</section>
+
+			<section>
+					<h2>Exersise</h2>
+					<p>Create summary product sale </p>
+					<p><img  width="790" height="410"  border=0 style ="background-color :#fff" src="img/jasper/chartreport.png"></p>
+			</section>
+
+			<section>
+					<h2>Exersise</h2>
+					<p>Create summary product sale </p>
+					<p><img  width="790" height="410"  border=0 style ="background-color :#fff" src="img/jasper/chartreport2.png"></p>
+			</section>
+
+			<section>
+					<h2>Show BLOB Image in iReport?</h2>
+			</section>
+
+			<section>
+					<h2>Exersise</h2>
+					<p>Create product report  with image </p>
+					<p><img  width="782" height="500"  border=0 style ="background-color :#fff" src="img/jasper/blob.png"></p>
+			</section>
+
+			<section>
+					<h2>Background Image in iReport?</h2>
+			</section>
+
+			<section>
+					<h2>Exersise</h2>
+					<p>Append background image to report</p>
+					<p><img  width="790" height="410"  border=0 style ="background-color :#fff" src="img/jasper/bgreport.png"></p>
+			</section>
+
+			<section>
+					<h5>Course Exersise</h5>
+					<p><img  width="490" height="590"  border=0 style ="background-color :#fff" src="img/jasper/courseexercise.png"></p>
+			</section>
+
+			<!--section>
+					<h2>Call Report from Java Application</h2>
+			</section-->
+
+			<section>
+				<h2>Questions?</h2>
+				</section>
+
+					<section>
+					<h1>The End</h1>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+		<script src="js/jquery-1.11.0.min.js"></script>
+		<script>
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+		</script>
+		<script type="text/javascript">
+            var header = $('#header').html();
+            if ( window.location.search.match( /print-pdf/gi ) ) {
+                  $('.slides > section').prepend(header);
+				 $('.slides > section > section').prepend(header);
+				  $('.slides > section > section > section').prepend(header);
+            }
+            else {
+                $('.slides').prepend(header);
+            }
+        </script>
+	</body>
+</html>

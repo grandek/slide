@@ -1,0 +1,1324 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Struts 2 MVC</title>
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+	<style type="text/css">
+            #header-left {
+                position: absolute;
+                top: 0%;
+                left: 0%;
+            }
+            #header-right {
+                position: absolute;
+                top: 0%;
+                right: 0%;
+            }
+            #footer-left {
+                position: absolute;
+                bottom: 0%;
+                left: 0%;
+            }
+			 #footer-right {
+                position: absolute;
+                bottom: 0%;
+                 right: 0%;
+            }
+			
+			 #footer-center {
+               position: absolute;
+			  margin: auto;
+			  right: 0;
+			  bottom: 0;
+			  left: 0;
+			  height: 0px;
+			  background-color: #f3f2ef;
+			  border-radius: 3px;
+            }
+        </style>
+
+        <div id="hidden" style="display:none;">
+            <div id="header">
+                <div id="header-left"></div>
+                <div id="header-right"></div>
+				<div id="footer-left"><p  style="font-size:12px"></p></div>
+                <div id="footer-center"><p  style="font-size:12px; color:gray;">Struts 2 MVC by Ekkachai Kaewprasert</p></div>
+            </div>
+        </div>
+		<div class="reveal">
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+			<section>
+						<h1>Struts 2 MVC</h1>
+			</section>
+			<section>
+				<h2>What?</h2>
+				  <ul>
+						<li>Free open- source solution for creating Java web applications</li>
+						<li>Based on Java Servlets and JSP technologies</li>
+                        <!--li>Created by Craig R. McClanahan</li>
+                        <li>Donated to the Apache software foundation in 2000</li-->
+						<li>Action Based Framework</li>
+                        <li>Create web application using MVC architecture</li>
+                        <!--li>Struts 2 = WebWork + Struts</li-->
+						
+						
+					</ul>
+			</section>
+			<section>
+					<h2>Why ?</h2>
+					<ul>
+						<li>Free to develop & deploy - open source</li>
+						<li>Stable & Mature</li>
+						<li>Many supported third-party tools</li>
+                        <li>Feature-rich</li>
+                        <li>Flexible & Extendable</li>
+                        <li>Large User Community</li>
+                        <li>Easy plug-in</li>
+                        <li>Ajax support</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Struts 2 framework features</h2>
+					<ul>
+						<li>POJO forms and POJO actions</li>
+						<li>Action based framework</li>
+                        <li>Model 2 - MVC Implementation</li>
+                        <li>Internationalization(I18N) Support</li>
+                        <li>Rich JSP Tag Libraries</li>
+                        <li>Annotation and XML configuration options</li>
+                        <li>Easy to test and debug</li>
+					</ul>
+				</section>
+			<section>
+				<h2>MVC Component</h2>
+				<img  style="border:0;background:none;box-shadow:none;margin-top:5vh;" width="800" height="369" src="img/mvc_role_diagram.png">
+				
+			</section>
+		
+			 <section>
+                    <h2>Model</h2>
+                    <ul>
+                        <li>Implement by action class</li>
+                        <li>For model you can use any data access technologies like JDBC, EJB, Hibernate</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>View</h2>
+                    <ul>
+                        <li>Its your result part. It can be JSP, JSTL, JSF etc.</li>
+                        <li>Presentation part of the MVC</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Controller</h2>
+                    <ul>
+                        <li>FilterDispatcher
+                            <ul>
+                                <li>First component that start processing that is why this type of MVC is called front controller MVC</li>
+                                <li>Looks at the request and apply the appropriate action</li>
+                                <li>Struts framework handles all of the controller work</li>
+                                <li>Its configured in web.xml</li>
+                            </ul>
+                        </li>
+                        <li>Interceptors
+                            <ul>
+                                <li>Can execute code before and after an Action is executed</li>
+                                <li>They can be configured per action basis</li>
+                                <li>Can be used for data validation, file upload, double submit guards</li>
+                        </li>
+                    </ul>
+                </section>
+				
+			
+                <section>
+                    <h2>Request Lifecycle in Struts 2</h2>
+                    <p><img width="480" height="185" src="img/struts-2-request-cycle.png"></p>
+				  </section>
+				 <section>
+                    <h2>Request Lifecycle Detail</h2>
+                   <ul>
+					<li>Request is generated by user and sent to Servlet container</li>
+					<li>Servlet container invokes FilterDispatcher filter which in turn determines appropriate action</li>
+					<li>Intercetors are applied before calling the Action</li>
+					<li>Action is executed and the Result is generated by Action</li>
+					<li>The output of Action is rendered in the view (JSP, Velocity, etc) and the result is returned to the user</li>
+				</ul>
+                </section>
+				
+				 <section>
+                    <h2>Request Lifecycle in Struts 2 MVC</h2>
+                    <p><img width="459" height="392" src="img/struts_2_architecture.gif"></p>
+                </section>
+				<section>
+				 <h2>Request Lifecycle Detail</h2>
+				<ul>
+					<li>User sends a request to the server for requesting for some resource (i.e pages).</li>
+					<li>The FilterDispatcher looks at the request and then determines the appropriate Action.</li>
+					<li>Configured interceptors functionalities applies such as validation, file upload etc.</li>
+					<li>Selected action is executed to perform the requested operation.</li>
+					<li>Again, configured interceptors are applied to do any post-processing if required.</li>
+					<li>Finally the result is prepared by the view and returns the result to the user.</li>
+				</ul>
+				</section>
+                <section>
+                    <h2>Struts Workflow</h2>
+                    <p><img width="512" height="580" src="img/Struts2-Architecture.png"></p>
+                </section>
+
+			<section>
+				<h2>Architecture in details</h2>
+				<ul>
+					<li>The normal lifecycle of struts begins when the request is sent from client. This request is passed to filter dispatcher by web container.</li>
+					<li>The Filter Dispatcher filter is called which consults the ActionMapper to determine whether an Action should be invoked.</li>
+					<li>If ActionMapper finds an Action to be invoked, the Filter Dispatcher delegates control to ActionProxy.</li>
+					<li>ActionProxy reads the configuration file such as struts.xml. ActionProxy creates an instance of ActionInvocation class and delegates the control.</li>
+				</ul>
+			</section>
+			<section>
+				<h2>Architecture in details(cont.)</h2>
+				<ul>
+					<li>ActionInvocation is responsible for command pattern implementation. It invokes the Interceptors one by one (if required) and then invoke the Action.</li>
+					<li>Once the Action returns, the ActionInvocation is responsible for looking up the proper result associated with the Action result code mapped in struts.xml.</li>
+					<li>The Interceptors are executed again in reverse order and the response is returned to the Filter (In most cases to FilterDispatcher). And the result is then sent to the servlet container which in turns send it back to client.</li>
+				</ul>
+			</section>
+			<section>
+				<h2>Struts Core Component</h2>
+				<ul>
+					<li>Actions</li>
+					<li>Results / Result types</li>
+					<li>Interceptors</li>
+					<!--li>Value Stack / OGNL</li-->
+					<!--li>View technologies</li-->
+				</ul>
+			</section>
+			<section>
+				<h2>Actions</h2>
+				<ul>
+				<li>POJO class which has String execute() method</li>
+				<li>Action Mapping maps an identifier to action class</li>
+				<li>Mapping also specifies</li>
+					<ul>
+						<li>Set of Result Types</li>
+						<li>Set of Exception Handlers</li>
+						<li>An Interceptor Stack</li>
+					</ul>
+				<li>Action can chain one to one</li>
+				<li>Action can be configured by xml configuration or annotation</li>
+				</ul>
+			</section>
+				<section >
+				<h2>Action Example</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public class HelloWorldAction extends ActionSupport{
+   private String name;
+   public String execute() throws Exception {
+      if ("SECRET".equals(name))
+      {
+         return SUCCESS;
+      }else{
+         return ERROR;  
+      }
+   }
+   public String getName() {
+      return name;
+   }
+   public void setName(String name) {
+      this.name = name;
+   }
+}
+</code></pre>
+			</section>
+
+			<section>
+				<h2>Action configuration</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<action name="hello" class="HelloWorldAction"  method="execute">
+	<result name="success">/HelloWorld.jsp</result>
+	<result name="error">/AccessDenied.jsp</result>
+</action>
+<action name="something" class="SomeOtherClass" method="execute">
+	<result name="success">/Something.jsp</result>
+	<result name="error">/AccessDenied.jsp</result>
+</action>
+				</code></pre>
+			</section>
+
+				<section>
+				<h2>Wildcard Mapping</h2>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<action name="Login_*" class="com.aug.wildcardmethod.action.LoginAction" method="{1}">
+	<result name="input">/Login.jsp</result>
+	<result name="cancel" type="redirectAction">Welcome</result>
+	<result type="redirectAction">MainMenu</result>
+	<result name="expired" type="chain">ChangePassword</result>
+	<exception-mapping exception="com.aug.ExpiredPasswordException"	result="expired"></exception-mapping >
+	<interceptor-ref name="guest"></interceptor-ref >
+</action>					
+				</code></pre>
+				<ul>
+					<li>Login action</li>
+						<ul>
+							<li>Login_input -> /Login.jsp</li>
+							<li>Login_cancel -> redirect to Welcome action</li>
+							<li>Login_expired -> chain to ChangePassword action</li>
+							<li>Exception mapping</li>
+					</ul>
+				</ul>
+			</section>
+
+			<section>
+				<h2>Action config by annotation</h2>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Results({
+  @Result(name="failure", location="fail.jsp")
+})
+public class HelloWorld extends ActionSupport {
+  @Action(value="/different/url", results={@Result(name="success", location="/hello.jsp", type="redirect")})
+  public String execute() { return SUCCESS; }
+
+  @Actions({
+    @Action("/different/url"),
+    @Action("/another/url")
+  }) 
+  public String doSomething() {  return SUCCESS; }
+}
+				</code></pre>
+				<ul>
+				<li>Annotations are:</li>
+					<ul>
+						<li><a>@Result</a> for page transition</li>
+						<li><a>@Action</a> for action method name instead of juse execute</li>
+						<li><a>@Actions</a> for multiple names for just one method</li>
+					<ul>
+				</ul>
+			</section>
+			 <section>
+                    <h2>Results</h2>
+                    <ul>
+                        <li>When an Action class method completes, it return a String
+                            <ul>
+                                <li>The value of String is used to select a result element</li>
+                                <li>An action mapping will often have a set of results representing different possible outcomes</li>
+                            </ul>
+                        </li>
+                        <li>There are predefined result names (tokens)</li>
+                        <li>Applications can define other result names (tokens) to match specific cases</li>
+                    </ul>
+                </section>
+
+				<section>
+				<h2>Results(cont.)</h2>
+				<ul>
+				<p>Result is configured by</p>
+				<ul>
+					<li>xml</li>
+					<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+						<result name=&quot;login&quot; type=&quot;redirectAction&quot;>Login_input</result>
+					</code></pre>
+				</ul>
+				<ul>
+					<li>Annotation</li>
+					<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px; ">
+@Result(name = &quot;list&quot;, value = &quot;listPeople.action&quot;, type = ServletRedirectResult. class)
+					</code></pre>
+				<ul>
+				</ul>
+				</section>
+
+				  <section>
+                    <h2>Pre-defined result names (tokens)</h2>
+                    <ul>
+                        <li>String SUCCESS = "success";</li>
+                        <li>String NONE = "none";</li>
+                        <li>String ERROR = "error";</li>
+                        <li>String INPUT = "input";</li>
+                        <li>String LOGIN = "login";</li>
+                    </ul>
+                </section>
+			<section>
+				<h2>Result types</h2>
+				<ul>
+				<li>All the result of Action.These are:</li>
+					<ul>
+						<li>ServletDispatcherResult(default)</li>
+						<li>ServletRedirectResult</li>
+						<li>StreamResult</li>
+						<li>JasperReportsResult from jasper-report-plugin</li>
+						<li>FreeMarkerResult</li>
+						<li>ChartResult</li>
+						<li>and so on….</li>
+					</ul>
+				</ul>
+			</section>
+			<section>
+				<h2>Result types Example</h2>
+				<pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<result-types>
+	<result-type name="jasper" class="org.apache.struts2.views.jasperreports.JasperReportsResult"></result-type>
+	<result-type name="json" class="org.apache.struts2.json.JSONResult"></result-type>
+	<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult"></result-type>
+</result-types>
+				</code></pre>
+			</section>
+				
+			<section>
+				<h2>Interceptors</h2>
+				<ul>
+					<li>Interceptor is the filter for Action</li>
+					<li>Called before/after your action</li>
+						<ul>
+							<li>Providing preprocessing logic before the action is called</li>
+							<li>Providing postprocessing logic after the action is called</li>
+							<li>Catching exceptions so that alternate processing can be performed</li>
+						</ul>
+				</ul>
+			</section>
+
+				<section>
+				<h2>Interceptors (cont.)</h2>
+				<ul>
+						<li>Struts 2 framework provides interceptors that come preconfigured and ready to use</li>
+							<ul>
+								<li>Debugging</li>
+								<li>Exception mapping</li>
+								<li>File upload</li>
+								<li>Token generator and validator</li>
+								<li>Security checker</li>
+								<li>etc..</li>
+							</ul>
+				</ul>
+			</section>
+			<section>
+				<h2>Configuration</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<interceptors>
+	<interceptor name="myinterceptor" class="MyInterceptor" ></interceptor>
+</interceptors>
+				</code></pre>
+						</section>
+
+				<section>
+				<h2>To use Interceptor</h2>
+				<ul>
+					<li>by xml configuration</li></ul>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+						<action name="hello" class="com.tutorialspoint.struts2.HelloWorldAction" method="execute">
+	<interceptor-ref name="myinterceptor" ></interceptor-ref>
+	<result name="success">/HelloWorld.jsp</result>
+</action>
+					</code></pre>
+				<ul>
+					<li>by Annotation</li></ul>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px; overflow:visible;">
+@InterceptorRef(value="MyInterceptor")
+					</code></pre>
+			</section>
+
+			<section>
+				<h2>Plugins</h2>
+				<ul>
+					<li>Almost all is based on Interceptor</li>
+					<li>Some of these is based on Result</li>
+					<li>These plugins is configured by struts.xml</li>
+				<ul>
+			</section>
+			 <section>
+                    <h2>Bundled Plugins</h2>
+                    <ul>
+                        <li>JSF</li>
+                        <li>REST</li>
+                        <li>Spring</li>
+                        <li>Tiles</li>
+                        <li>JasperReports</li>
+                        <li>JFreeChart</li>
+                        <li>Etc.</li>
+                    </ul>
+                </section>
+				<section>
+				<h2>Struts 2 Configuration Files</h2>
+				<ul>
+					<li>web.xml</li>
+					<ul>
+						<li>/WEB-INF/</li>
+						<li>Web deployment descriptor to include all necessary framework components</li>
+					</ul>
+					<li>struts.xml</li>
+					<ul>
+						<li>/WEB-INF/classes/</li>
+						<li>Main configuration, contains result/view types, action mappings, interceptors, etc.</li>
+					</ul>
+				</ul>
+			</section>
+			<section>
+				<h2>Struts 2 Hello World</h2>
+			</section>
+			<section>
+				<h2>Create web application with Maven</h2>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+mvn archetype:generate 
+-DarchetypeGroupId=org.apache.maven.archetypes 
+-DarchetypeArtifactId=maven-archetype-webapp 
+-DgroupId=com.aug -DartifactId=augwebapp
+				</code></pre>
+					<p>Or clone hellospring from github</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+https://github.com/grandek/strutsblank.git
+				</code></pre>
+			</section>
+ <section>
+                    <h2>Add struts2-core in pom.xml</h2>
+                    <pre><code contenteditable style="margin-top: 20px;">
+
+                        &lt;dependency&gt;
+                            &lt;groupId&gt;org.apache.struts&lt;/groupId&gt;
+                            &lt;artifactId&gt;struts2-core&lt;/artifactId&gt;
+                            &lt;version&gt;2.3.16.3&lt;/version&gt;
+                        &lt;/dependency&gt;
+
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Convert to Eclipse project</h2>
+                    <pre><code contenteditable style="margin-top: 20px;">
+                        mvn eclipse:eclipse -Dwtpversion=2.0
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>sample.jsp</h2>
+                    <pre><code contenteditable style="margin-top: 20px;">
+                        &lt;%@ page contentType="text/html; charset=UTF-8"%&gt;
+                        &lt;%@ taglib prefix="s" uri="/struts-tags"%&gt;
+                        &lt;html&gt;
+                        &lt;head&gt;&lt;/head&gt;
+                        &lt;body&gt;
+                            &lt;h1&gt;Welcome to Struts2&lt;/h1&gt;
+                            &lt;s:form action="hello"&gt;
+                                &lt;s:textfield name="name" label="Name" /&gt;
+                                &lt;s:submit /&gt;
+                            &lt;/s:form&gt;
+                        &lt;/body&gt;
+                        &lt;/html&gt;
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>hello.jsp</h2>
+                    <pre><code contenteditable style="margin-top: 20px;">
+                        &lt;%@ page contentType="text/html; charset=UTF-8"%&gt;
+                        &lt;%@ taglib prefix="s" uri="/struts-tags"%&gt;
+                        &lt;html&gt;
+                        &lt;head&gt;&lt;/head&gt;
+                        &lt;body&gt;
+                            &lt;h1&gt;Welcome to Struts2&lt;/h1&gt;
+                            &lt;h4&gt;Hello &lt;s:property value="name"/&gt; !! &lt;/h4&gt;
+                        &lt;/body&gt;
+                        &lt;/html&gt;
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Action class</h2>
+                    <pre><code contenteditable style="margin-top: 20px;">
+                        public class HelloAction{
+                            private String name;
+
+                            public String getName() {
+                                return name;
+                            }
+
+                            public void setName(String name) {
+                                this.username = name;
+                            }
+
+                            public String execute() {
+                                return "success";
+                            }
+                        }
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>struts.xml</h2>
+                    <pre><code contenteditable style="margin-top: 20px;">
+                        &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+                        &lt;!DOCTYPE struts PUBLIC
+                        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+                        "http://struts.apache.org/dtds/struts-2.0.dtd"&gt;
+                        &lt;struts&gt;
+		&lt;constant name="struts.devMode" value="true" /&gt;
+		&lt;constant name="struts.convention.default.parent.package" value="default"/&gt;
+                            &lt;package name="default" namespace="/" extends="struts-default"&gt;
+                                &lt;action name="sample"&gt;
+                                    &lt;result&gt;pages/sample.jsp&lt;/result&gt;
+                                &lt;/action&gt;
+                                &lt;action name="hello" class="com.aug.augwebapp.actions.HelloAction"&gt;
+				&lt;result name="input"&gt;pages/sample.jsp&lt;/result&gt;
+                                    &lt;result name="success"&gt;pages/hello.jsp&lt;/result&gt;
+                                &lt;/action&gt;
+                            &lt;/package&gt;
+                        &lt;/struts&gt;
+                    </code></pre>
+                </section>
+                <section>
+					<h2>web.xml</h2>
+                   <pre style="width:100%;"><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+                       &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5"&gt;
+	&lt;display-name&gt;Welcome to Struts2&lt;/display-name&gt;
+	&lt;filter&gt;
+	     &lt;filter-name&gt;struts2&lt;/filter-name&gt;
+	     &lt;filter-class&gt;org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter&lt;/filter-class&gt;
+	&lt;/filter&gt;
+	&lt;filter-mapping&gt;
+	     &lt;filter-name&gt;struts2&lt;/filter-name&gt;
+	     &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+	&lt;/filter-mapping&gt;
+&lt;/web-app&gt;
+                    </code></pre>
+                </section>
+
+				<section>
+					<h2>Action Exercise</h2>
+					<ul>
+						<li>Create login page with</li>
+						<ul>
+							<li>UserName -Not null & length > 2</li>
+							<li>Password - Not null & length >= 6</li>
+						</ul>
+						<li>Welcome page</li>
+						<ul>
+							<li>display Welcome + username</li>
+						</ul>
+					</ul>
+				</section>
+
+			<section>
+				<h2>Validation</h2>
+				<p>Assist the application to run the rules to perform validation before the action method is executed.</p>
+			</section>
+			
+
+<section>
+				<h2>To use Validation in Action Class</h2>
+				<p>Add a method  validate()  in ActionClass </p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public void validate(){
+	if (name == null || name.trim().equals("")){
+	        	 addFieldError("name","The name is required.");
+	}
+	      
+	if (name != null && (name.length() < 2 || name.length() > 8)){
+		addFieldError("name","Name must be length max 2 - 8 character.");
+	}
+}
+					</code></pre>
+			
+			</section>
+ <section>
+                    <h2>Defining Validation Rules XML</h2>
+                    <ul>
+                        <li>Per Action class:
+                            <ul>
+                                <li>in a file named &lt;ActionName&gt;-validation.xml</li>
+                            </ul>
+                        </li>
+                        <li>Per Action alias:
+                            <ul>
+                                <li>in a file named &lt;ActionName-alias&gt;-validation.xml</li>
+                            </ul>
+                        </li>
+                        <li>Inheritance hierarchy and interfaces implementd by Action class</li>
+                    </ul>
+                </section>
+<section>
+
+                    <h2>To use Validation XML</h2>
+                   <p>Add validate="true" to form action </p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;%@ page contentType="text/html; charset=UTF-8"%&gt;
+&lt;%@ taglib prefix="s" uri="/struts-tags"%&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;/head&gt;
+&lt;body&gt;
+	&lt;h1&gt;Welcome to Struts2&lt;/h1&gt;
+	&lt;s:form action="hello" validate = "true"&gt;
+		&lt;s:textfield name="name" label="Name" /&gt;
+		&lt;s:submit /&gt;
+	&lt;/s:form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                    </code></pre>
+                </section>
+
+
+
+			<section>
+				<h2>To use Validation XML(cont)</h2>
+				<p>Create HelloAction-validation.xml</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px; overflow:visible;">
+<?xml version="1.0" encoding="UTF-8"?>
+&lt;!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd"&gt;
+<validators>
+   <field name="name">
+      <field-validator type="required">
+         <message> The name is required.</message>
+      </field-validator>
+       <field-validator type="stringlength">
+        &lt;param name="minLength"&gt;2&lt;/param&gt;
+        &lt;param name="maxLength"&gt;8&lt;/param&gt;
+         <message>Name must be length  2 - 8 character. </message>
+      </field-validator>
+   </field>
+</validators>
+					</code></pre>
+			</section>
+
+			<section>
+					<h2>Validation Exercise</h2>
+					<ul>
+						<li>Add validation</li>
+						<ul>
+							<li>UserName - not null ,length 2 - 8 character</li>
+							<li>Password - length  6 - 12 characters</li>
+						</ul>
+						
+					</ul>
+				</section>
+
+
+			<section>
+				<h2>Interceptor</h2>
+			</section>
+			<section>
+				<h2>Create MyInterceptor</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public class MyLoggingInterceptor extends AbstractInterceptor {
+
+	public String intercept(ActionInvocation invocation)throws Exception{
+
+		 String className = invocation.getAction().getClass().getName();
+	        long startTime = System.currentTimeMillis();
+	        System.out.println("Before calling action: " + className);
+	 
+	        String result = invocation.invoke();
+	 
+	        long endTime = System.currentTimeMillis();
+	        System.out.println("After calling action: " + className
+	                + " Time taken: " + (endTime - startTime) + " ms");
+	 
+	        return result;
+	   }
+}
+				</code></pre>
+			</section>
+			<section>
+				<h2>configuration</h2>
+				<p>struts.xml</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<interceptors>
+	&lt;interceptor name="mylogging" class="th.co.augmentis.interceptor.MyLoggingInterceptor" /&gt;
+	<interceptor-stack name="loggingStack">
+	     &lt;interceptor-ref name="mylogging"/&gt;
+	     &lt;interceptor-ref name="defaultStack"/&gt;
+	</interceptor-stack>
+</interceptors>
+				</code></pre>
+			</section>
+	<section>
+				<h2>To use Interceptor</h2>
+				<ul>
+					<li>by xml configuration</li></ul>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+						<action name="hello" class="com.tutorialspoint.struts2.HelloWorldAction" method="execute">
+	<interceptor-ref name="myinterceptor" ></interceptor-ref>
+	<result name="success">/HelloWorld.jsp</result>
+</action>
+					</code></pre>
+				<ul>
+					<li>by Annotation</li></ul>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px; overflow:visible;">
+@InterceptorRef(value="MyInterceptor")
+					</code></pre>
+			</section>
+			<section>
+				<h2>Tiles</h2>
+				<p>Common layout of website is defined in a central configuration file for all the webpages</p>
+			</section>
+			<section>
+				<h2>Application Layout</h2>
+				<p>Our goal is to add Header, Footer and Menu to our  application</p>
+				 <p><img width="359" height="321" src="img/struts2-tiles-layout.gif"></p>
+			</section>
+
+				<section>
+				<h2>Add struts2-tiles-plugin in pom.xml</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<dependency>
+	<groupId>org.apache.struts</groupId>
+	<artifactId>struts2-tiles-plugin</artifactId>
+	<version>2.3.16.3</version>
+</dependency>
+				</code></pre>
+			</section>
+			<section>
+				<h2>Create Tiles</h2>
+				<ul>
+						<li>Add  "/webapp/tiles"  Folder contains file</li>
+						<ul>
+							<li>BaseLayout.jsp</li>
+							<li>Header.jsp</li>
+							<li>Menu.jsp</li>
+							<li>Footer.jsp</li>
+						</ul>
+						
+					</ul>
+			</section>
+
+			<section>
+				<h2>Create Tiles(cont.)</h2>
+				<p>Header.jsp</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<h2>Hello Struts Header</h2>
+				</code></pre>
+				<p>Menu.jsp</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
+<s:a href="/augwebapp/login">Login</s:a>
+				</code></pre>
+				<p>Footer.jsp</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+Copyright &copy; augmentis.co.th
+				</code></pre>
+			</section>
+
+				<section>
+				<h2>Create Tiles(cont.)</h2>
+				<p>BaseLayout.jsp</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd"&gt;
+&lt;html&gt;
+&lt;head&gt;	
+	&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+	&lt;title&gt;&lt;tiles:insertAttribute name="title" ignore="true" /&gt;&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;table width="100%" border="1" cellpadding="2" cellspacing="2" align="center"&gt;
+		     &lt;tr&gt;
+			          &lt;td height="30" colspan="2"&gt;&lt;tiles:insertAttribute name="header" /&gt;&lt;/td&gt;
+		     &lt;/tr&gt;&lt;tr&gt;
+			          &lt;td height="250"&gt;&lt;tiles:insertAttribute name="menu" /&gt;&lt;/td&gt;
+			          &lt;td&gt;&lt;tiles:insertAttribute name="body" /&gt;&lt;/td&gt;
+		     &lt;/tr&gt;&lt;tr&gt;
+			          &lt;td height="30" colspan="2"&gt;&lt;tiles:insertAttribute name="footer" /&gt;&lt;/td&gt;
+		     &lt;/tr&gt;
+	&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+				</code></pre>
+			</section>
+		<section>
+				<h2>Create tiles.xml</h2>
+				<p>Add tiles.xml to /WEF-INF/tiles.xml</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<?xml version="1.0" encoding="UTF-8" ?>
+&lt;!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd"&gt;
+&lt;tiles-definitions&gt;
+     &lt;definition name="baseLayout" template="/tiles/BaseLayout.jsp"&gt;
+          &lt;put-attribute name="title" value="" /&gt;
+          &lt;put-attribute name="header" value="/tiles/Header.jsp" /&gt;
+          &lt;put-attribute name="menu" value="/tiles/Menu.jsp" /&gt;
+          &lt;put-attribute name="body" value="" /&gt;
+          &lt;put-attribute name="footer" value="/tiles/Footer.jsp" /&gt;
+     &lt;/definition&gt;
+     &lt;definition name="/hello.tiles" extends="baseLayout"&gt;
+          &lt;put-attribute name="title" value="Hello" /&gt;
+          &lt;put-attribute name="body" value="/pages/hello.jsp" /&gt;
+     &lt;/definition&gt;
+&lt;/tiles-definitions&gt;
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>Modify struts.xml</h2>
+				<p>Add type="tiles" result type</p>
+				<p>Change hello.jsp to /hello.tiles</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<result-types>
+	<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult"/>
+</result-types>
+<action name="hello" class="th.co.augmentis.actions.HelloAction">
+	<interceptor-ref name="loggingStack"></interceptor-ref>
+	<result name="input">pages/sample.jsp</result>
+	<result name="success" type="tiles">/hello.tiles</result>
+</action>
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>Modify web.xml</h2>
+				<p>Add Tiles listener to web.xml</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<!-- Tiles Listener -->
+<listener>
+	<listener-class>org.apache.struts2.tiles.StrutsTilesListener</listener-class>
+	</listener>
+<context-param>
+	<param-name>org.apache.tiles.impl.BasicTilesContainer.DEFINITIONS_CONFIG</param-name>
+	<param-value>/WEB-INF/tiles.xml</param-value>
+</context-param>
+				</code></pre>
+			</section>
+
+			<section>
+					<h2>Tiles Exercise</h2>
+					<ul>
+						<li>Apply  tiles to all webpages</li>
+						<ul>
+							<li>login.jsp</li>
+							<li>hello.jsp</li>
+							<li>welcome.jsp</li>
+						</ul>
+						
+					</ul>
+				</section>
+
+				 <section>
+                    <h2>Struts 2 Annotation</h2>
+                    <ul>
+                        <li>Scanning Methodology - "struts, struts2, action or actions"</li>
+                        <li>Naming Converter</li>
+						  <ul>
+							<li>Remove the “Action” word at the end of the file name, if present.</li>
+							<li>Convert the first letter of the file name to lowercase.</li>
+						</ul>
+                    </ul>
+                </section>
+				  <section>
+                    <h2>Scanning Methodology</h2>
+					<p>Modify struts2 filter in web.xml</p>
+                    <pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;filter&gt;
+	&lt;filter-name&gt;struts2&lt;/filter-name&gt;
+	&lt;filter-class&gt; org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter&lt;/filter-class&gt;
+	&lt;init-param&gt;
+	     &lt;param-name&gt;actionPackages&lt;/param-name&gt;
+	     &lt;param-value&gt;th.co.augmentis.actions&lt;/param-value&gt;
+	&lt;/init-param&gt;
+&lt;/filter&gt;
+                    </code></pre>
+                </section>
+				<section>
+                    <h2>Let's go to Annotation</h2>
+                    <ul>
+                        <li>Add dependency "struts2-convention-plugin" with version "2.3.16.3"</li>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<dependency>
+	<groupId>org.apache.struts</groupId>
+	<artifactId>struts2-convention-plugin</artifactId>
+	<version>2.3.16.3</version>
+</dependency>
+				</code></pre>
+                        <li>Create a LoginAction extends ActionSupport</li>
+                        <li>Change HelloAction to Annotation config</li>
+                    </ul>
+                </section>
+
+			<section>
+				<h3>Create a LoginAction extends ActionSupport</h3>
+				<p>XML</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<package name="default" namespace="/" extends="struts-default">
+	<action name="login">
+	     <result>pages/login.jsp</result>
+	</action>
+</package>
+				</code></pre>
+				<p>Annotation version</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Namespace("/")
+@ResultPath(value="/")
+@Result(name="success",location="pages/login.jsp")
+public class LoginAction extends ActionSupport {
+
+}
+				</code></pre>
+			</section>
+
+			<section>
+				<h3>Change HelloAction to Annotation config</h3>
+				<p>XML</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<action name="hello" class="th.co.augmentis.actions.HelloAction">
+	<interceptor-ref name="loggingStack"></interceptor-ref>
+	<result name="input">pages/sample.jsp</result>
+	<result name="success">pages/welcome.jsp</result>
+</action>
+				</code></pre>
+				<p>Annotation version</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+@Namespace("/")
+@ResultPath(value="/")
+@InterceptorRefs(value={
+	@InterceptorRef(value="mylogging"), @InterceptorRef(value="defaultStack")
+})
+public class HelloAction extends ActionSupport{
+	private String name;
+	public String getName() {return name;}
+    	public void setName(String name) {this.name = name;}
+
+    	@Action(value="hello", results={
+    	     @Result(name="input", location="pages/sample.jsp"),
+		     @Result(name="success", location="/hello.tiles" ,type="tiles")
+    	})
+	public String execute() { return "success";}
+}
+				</code></pre>
+			</section>
+
+				<section>
+					<h2>Annotation Exercise</h2>
+					<ul>
+						<li>Change action configuration to Annotation</li>						
+						
+					</ul>
+				</section>
+
+
+                <!--section>
+                    <h2>How to change execute() method name ?</h2>
+                </section-->
+		
+				<section>
+					<h2>Message Resource</h2>
+					<ul>
+					<li>Message resources provide a simple way to put text in a view page</li>
+						<ul>
+							<li> to create form field labels</li>
+							<li>and to change text to a specific language based on the user's locale (i18n).</li>
+						</ul>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Message Resource(cont.)</h2>
+					<p>When you reference a message element by its key</p>
+					<p>Struts framework searches for a corresponding message bundle in the following order:</p>
+
+					<ul>
+						<li>ActionClass.properties</li>
+						<li>Interface.properties</li>
+						<li>SuperClass.properties</li>
+						<li>model.properties</li>
+						<li>package.properties</li>
+						<li>struts.properties</li>
+						<li>global.properties</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Configuration</h2>
+					<p>Modify struts.xml</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;constant name="struts.custom.i18n.resources" value="propertiesName1,propertitesName2.." /&gt;
+				</code></pre>
+				</section>
+				<section>
+					<h2>Display the resource message?</h2>
+					<p>View Example</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;s:textfield key="global.username" name="username" /&gt;
+&lt;s:text name="global.username" /&gt;
+&lt;s:property value="getText('global.username')" /&gt;
+&lt;s:text name="global.password" /&gt;
+&lt;message key="password.mismatch"&gt;Password mismatch&lt;/message&gt;
+				</code></pre>
+				<p>Action Example</p>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+public class LoginAction extends ActionSupport{
+	...
+	public void validate(){
+		     if("".equals(getUsername())){
+			          addFieldError("username", getText("username.required"));
+		     }
+	}
+}
+				</code></pre>
+				</section>
+
+				<section>
+					<h2>Exercise</h2>
+					<ul>
+						<li>Applies Message Resource to Web Project</li>			
+						<ul>
+							<li>login.jsp</li>
+							<li>hello.jsp</li>
+							<li>welcome.jsp</li>
+						</ul>
+						<li>Applies Message Resource to Validation</li>				
+					</ul>
+				</section>
+
+				<section>
+					<h2>i18n or localization configuration</h2>
+					<p>Parameters of i18n interceptor</p>
+					<ul>
+						<li><a>parameterName</a> It specifies the name of the HTTP request parameter. It is set to <a>request_locale</a> bydefault.</li>
+						<li><a>attributeName	</a> specifies the name of the session key to store the locale. It is <a>WW_TRANS_I18N_LOCALE</a> bydefault.</li>
+					</ul>
+				
+				</section>
+							<!--<interceptor-ref name="defaultStack">
+				<param name="i18n.parameterName">request_locale</param>
+			</interceptor-ref>-->
+
+				<section>
+					<h2>i18n tag</h2>
+					<p>This i18n tag can get the message from a specified resource bundle that declared in the “name” attribute</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+ <s:i18n name="test" >
+	   <s:text name="default.welcome" />
+</s:i18n>
+				</code></pre>
+				</section>
+				<section>
+					<h2>i18n or localization Exercise</h2>
+					<ul>
+						<li>Create link to switch language </li>
+						<ul>
+							<li>Thai (th)</li>
+							<li>English(en)</li>
+						</ul>
+						
+					</ul>
+				</section>
+				<section>
+					<h2>Struts 2 and Hibernate Integration </h2>
+				</section>
+
+				<section>
+				<h2>Add Maven Dependency</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<dependency>
+	<groupId>org.hibernate</groupId>
+	<artifactId>hibernate-core</artifactId>
+	<version>4.3.8.Final</version>
+</dependency>
+<dependency>
+	<groupId>org.hibernate.common</groupId>
+	<artifactId>hibernate-commons-annotations</artifactId>
+	<version>4.0.4.Final</version>
+</dependency>		
+<dependency>
+	<groupId>mysql</groupId>
+	<artifactId>mysql-connector-java</artifactId>
+	<version>5.1.34</version>
+	<scope>runtime</scope>
+</dependency>
+				</code></pre>
+				
+			</section>
+			<section>
+				<h2>Create Hibernate Entity</h2>
+			</section>
+
+					<section>
+				<h2>Maven Dependency Management</h2>
+		<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<properties>
+	<hibernate.version>4.3.8.Final</hibernate.version>
+</properties>
+<dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+	</dependencies>
+</dependencyManagement>
+
+				</code></pre>
+			</section>
+
+						<section>
+				<h2>Exclude Maven Dependency</h2>
+		<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+
+<dependencies>
+	<dependency>
+		<groupId>com.trainning</groupId>
+		<artifactId>Hibernate-Blank</artifactId>
+		<version>1.0</version>
+		<exclusions>
+			<exclusion>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-annotations</artifactId>
+			</exclusion>
+			<exclusion>
+				<groupId>org.hibernate.common</groupId>
+				<artifactId>hibernate-commons-annotations</artifactId>
+			</exclusion>
+			<exclusion>
+				<groupId>org.hibernate</groupId>
+				<artifactId>ejb3-persistence</artifactId>
+			</exclusion>
+		</exclusions>
+	</dependency>
+</dependencies>
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>Setting hibernate.cfg.xml</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/dbName</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">yourPassword</property>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+
+		&lt;mapping class="you.entity.class"/&gt;
+		
+	</session-factory>
+</hibernate-configuration>
+				</code></pre>
+			</section>
+
+			<section>
+				<h2>Modify Action Method</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+private SessionFactory sessionFactory;
+List&lt;Entity&gt; entitys = new ArrayList&lt;Entity&gt;();
+public List&lt;Entity&gt; getEnties() {
+	Session session = getSesstionFactory().openSession();
+	entitys = session.createQuery("from Entity").list();
+	session.close();
+	sessionFactory.close();
+	return entitys;
+}
+private SessionFactory getSesstionFactory(){
+	Configuration configuration = new Configuration().configure();
+	ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+	.applySettings(configuration.getProperties()).build();
+	sessionFactory = configuration.configure().buildSessionFactory(serviceRegistry);
+	return sessionFactory;
+}
+				</code></pre>
+				
+			</section>
+<section>
+				<h2>Modify Hello.jsp</h2>
+				<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+&lt;table&gt;
+	&lt;thead&gt;
+	    &lt;tr&gt;
+	        &lt;th&gt;Name&lt;/th&gt;
+	        &lt;th&gt;Price&lt;/th&gt;
+	    &lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+	    &lt;s:iterator value="products"var="product"&gt;
+	    &lt;tr&gt;
+	        &lt;td&gt;&lt;s:property value="productName"/&gt;&lt;/td&gt;
+	        &lt;td&gt;&lt;s:property value="price"/&gt;&lt;/td&gt;
+	    &lt;/tr&gt;
+	    &lt;/s:iterator&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+				</code></pre>
+					
+			</section>
+			<section>
+				<h2>Exercise</h2>
+					<ul>
+						<li>Create Hibernate CRUD</li>
+						<li>Show List of Entity</li>
+						<img  style="border:0;background:none;box-shadow:none;margin-top:5vh;" width="299" height="358" src="img/strutsCRUD.png">
+					</ul>
+			</section>
+
+				<section>
+				<h2>Questions?</h2>
+				</section>
+
+				<section>
+					<h1>The End</h1>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+		<script src="js/jquery-1.11.0.min.js"></script>
+		<script>
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+		</script>
+		<script type="text/javascript">
+            var header = $('#header').html();
+            if ( window.location.search.match( /print-pdf/gi ) ) {
+                $('.slides > section').prepend(header);
+            }
+            else {
+                $('.slides').prepend(header);
+            }
+        </script>
+	</body>
+</html>
